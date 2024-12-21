@@ -12,7 +12,7 @@ const ProductDetail = () => {
   useEffect(() => {
     axios
       .get(`/api/productDetail/${id}`)
-      .then((res) => setProduct(res.data))
+      .then((res) => setProduct(res.data))  // Assuming res.data contains instructor, schedule, and duration
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -28,6 +28,9 @@ const ProductDetail = () => {
       description: product.product_description,
       category: product.category,
       quantity: 1,
+      instructor: product.instructor,    // Added instructor
+      schedule: product.schedule,        // Added schedule
+      duration: product.duration         // Added duration
     };
 
     const existingItem = cartItems.find(item => item.id === product._id);
@@ -43,6 +46,14 @@ const ProductDetail = () => {
   // Change image function for thumbnails
   const changeImage = (src) => {
     document.getElementById('mainImage').src = src;
+  };
+
+  // Format schedule if it's an array
+  const formatSchedule = (schedule) => {
+    if (Array.isArray(schedule)) {
+      return schedule.join(', '); // Join array items as a comma-separated string
+    }
+    return schedule; // Return as is if not an array
   };
 
   return (
@@ -86,23 +97,33 @@ const ProductDetail = () => {
               <div className="flex space-x-4 mb-6">
                 <button
                   onClick={addtoCart}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
+                  className="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
                 >
-                  Add to Cart
-                </button>
-                <button className="bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300">
-                  Wishlist
+                  Add to Schedule
                 </button>
               </div>
 
-              {/* Key Features */}
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Key Features:</h3>
+              {/* Instructor and Duration */}
+              <div className="mt-6">
+                <p><strong>Instructor:</strong> {product.instructor}</p>
+                <p><strong>Duration:</strong> {product.duration}</p>
+              </div>
+
+              {/* Schedule Section */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold mb-2">Schedule:</h3>
+                <p className="text-gray-700">{formatSchedule(product.schedule)}</p>  {/* Using formatSchedule function */}
+              </div>
+
+              {/* Key Features Section */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold mb-2">Shikshyadwar Services:</h3>
                 <ul className="list-disc list-inside text-gray-700">
-                  <li>Industry-leading noise cancellation</li>
-                  <li>30-hour battery life</li>
-                  <li>Touch sensor controls</li>
-                  <li>Speak-to-chat technology</li>
+                  <li>Personalized guidance for studying abroad</li>
+                  <li>Expert counseling for IELTS, PTE, and SAT preparation</li>
+                  <li>Access to exclusive study materials and resources</li>
+                  <li>Flexible online and offline learning options</li>
+                  <li>Tailored counseling for university and country selection</li>
                 </ul>
               </div>
             </div>
