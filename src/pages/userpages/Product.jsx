@@ -41,7 +41,7 @@ const Product = () => {
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : products.length > 0 ? (
-          <div className="flex justify-around grid grid-cols-4 gap-8">
+          <div className="flex justify-start grid grid-cols-4 gap-9 w-full">
             {products.map((data) => (
               <Cards data={data} key={data._id} />
             ))}
