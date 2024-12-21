@@ -31,7 +31,7 @@ const HomePages = () => {
   return (
     <>
       <Carousel />
-      <AdmissionDescription />
+
 
       {/* Display Cards dynamically */}
       <section className="py-14">
@@ -45,7 +45,7 @@ const HomePages = () => {
           </div>
         </div>
       </section>
-
+      <AdmissionDescription />
       <Chatbox />
       <Library />
     </>
