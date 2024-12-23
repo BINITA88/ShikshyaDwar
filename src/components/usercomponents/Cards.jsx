@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 const Cards = (props) => {
   const { _id, product_name, product_image, category, product_price, product_description, instructor, schedule, duration } = props.data;
 
+  
+  
+  
   return (
     <>
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
