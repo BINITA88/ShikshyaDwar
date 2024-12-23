@@ -7,7 +7,7 @@ const ConfirmBooking = () => {
 
   // Fetch product and booking details from localStorage
   const productDetails = JSON.parse(localStorage.getItem('productDetails'));
-  const shippingInfo = JSON.parse(localStorage.getItem('shippingInfo'));
+  const bookingInfo = JSON.parse(localStorage.getItem('bookingInfo'));
   const { user } = isAuthenticated();
 
   // Calculate total price
@@ -16,7 +16,7 @@ const ConfirmBooking = () => {
   const proceedToPayment = () => {
     const data = {
       totalPrice,
-      shippingInfo,
+      bookingInfo,
     };
     sessionStorage.setItem('orderInfo', JSON.stringify(data));
     navigate('/payment');

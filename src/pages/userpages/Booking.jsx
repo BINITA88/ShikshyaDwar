@@ -7,23 +7,23 @@ const Booking = () => {
   const countriesList = Object.values(countries);
 
   // Get shipping info from localStorage or initialize with empty values
-  const shippinginfo = JSON.parse(localStorage.getItem('shippingInfo')) || {};
+  const bookingInfo = JSON.parse(localStorage.getItem('bookingInfo')) || {};
 
-  const [shippingaddress1, setShippingAddress1] = useState(shippinginfo.shippingaddress1 || '');
-  const [shippingaddress2, setShippingAddress2] = useState(shippinginfo.shippingaddress2 || '');
-  const [city, setCity] = useState(shippinginfo.city || '');
-  const [zip, setZip] = useState(shippinginfo.zip || '');
-  const [phone, setPhone] = useState(shippinginfo.phone || '');
-  const [country, setCountry] = useState(shippinginfo.country || '');
-  const [shift, setShift] = useState(shippinginfo.shift || ''); // New field for shift
-  const [classMode, setClassMode] = useState(shippinginfo.classMode || ''); // New field for class mode
-  const [interestedInCounseling, setInterestedInCounseling] = useState(shippinginfo.interestedInCounseling || false); // New field for counseling
+  const [shippingaddress1, setShippingAddress1] = useState(bookingInfo.shippingaddress1 || '');
+  const [shippingaddress2, setShippingAddress2] = useState(bookingInfo.shippingaddress2 || '');
+  const [city, setCity] = useState(bookingInfo.city || '');
+  const [zip, setZip] = useState(bookingInfo.zip || '');
+  const [phone, setPhone] = useState(bookingInfo.phone || '');
+  const [country, setCountry] = useState(bookingInfo.country || '');
+  const [shift, setShift] = useState(bookingInfo.shift || ''); // New field for shift
+  const [classMode, setClassMode] = useState(bookingInfo.classMode || ''); // New field for class mode
+  const [interestedInCounseling, setInterestedInCounseling] = useState(bookingInfo.interestedInCounseling || false); // New field for counseling
 
   const submitHandler = (e) => {
     e.preventDefault();  // Prevent default form submission
 
     // Create shipping info object with all fields
-    const updatedShippingInfo = {
+    const updatedBookingInfo = {
       shippingaddress1,
       shippingaddress2,
       city,
@@ -36,7 +36,7 @@ const Booking = () => {
     };
 
     // Save to localStorage
-    localStorage.setItem('shippingInfo', JSON.stringify(updatedShippingInfo));
+    localStorage.setItem('bookingInfo', JSON.stringify(updatedBookingInfo));
 
     // Redirect to confirmation page
     navigate('/confirm');
