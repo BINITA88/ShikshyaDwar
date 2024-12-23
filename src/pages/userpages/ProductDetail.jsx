@@ -13,34 +13,19 @@ const ProductDetail = () => {
   useEffect(() => {
     axios
       .get(`/api/productDetail/${id}`)
-      .then((res) => setProduct(res.data)) // Assuming res.data contains instructor, schedule, and duration
+      .then((res) => setProduct(res.data)) // Assuming res.data contains product details
       .catch((err) => console.log(err));
   }, [id]);
 
-  const addtoCart = () => {
-    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  const BookingHandler = () => {
+    // Store product details in localStorage for later use on booking page
+    localStorage.setItem('productDetails', JSON.stringify(product));
 
-    const productItem = {
-      id: product._id,
-      name: product.product_name,
-      price: product.product_price,
-      countInStock: product.countInStock,
-      image: product.product_image,
-      description: product.product_description,
-      category: product.category,
-      quantity: 1,
-      instructor: product.instructor, // Added instructor
-      schedule: product.schedule, // Added schedule
-      duration: product.duration, // Added duration
-    };
-
-    const existingItem = cartItems.find((item) => item.id === product._id);
-    if (existingItem) {
-      toast.error("Item is already present in your cart!");
+    const isAuthenticated = JSON.parse(localStorage.getItem('jwt'));
+    if (isAuthenticated) {
+      navigate('/booking');
     } else {
-      cartItems.push(productItem);
-      localStorage.setItem('cartItems', JSON.stringify(cartItems));
-      toast.success(`${productItem.name} added to the cart!`);
+      navigate('/login?redirect=Booking');
     }
   };
 
@@ -55,15 +40,6 @@ const ProductDetail = () => {
       return schedule.join(', '); // Join array items as a comma-separated string
     }
     return schedule; // Return as is if not an array
-  };
-
-  const BookingHandler = () => {
-    const isAuthenticated = JSON.parse(localStorage.getItem('jwt'));
-    if (isAuthenticated) {
-      navigate('/Booking');
-    } else {
-      navigate('/login?redirect=Booking');
-    }
   };
 
   return (
@@ -110,7 +86,6 @@ const ProductDetail = () => {
                 >
                   Book classes
                 </button>
-              
               </div>
 
               {/* Instructor and Duration */}
@@ -122,8 +97,6 @@ const ProductDetail = () => {
                   <strong>Duration:</strong> {product.duration}
                 </p>
               </div>
-
-              
 
               {/* Key Features Section */}
               <div className="mt-6">

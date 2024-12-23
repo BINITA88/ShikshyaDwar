@@ -20,6 +20,7 @@ import UpdateProduct from './pages/adminpages/UpdateProduct';
 import ProductDetail from './pages/userpages/ProductDetail';
 import Cart from './pages/userpages/Cart';
 import Booking from './pages/userpages/Booking';
+import ConfirmOrder from './pages/userpages/ConfirmOrder';
 
 
 function Myroute() {
@@ -52,6 +53,7 @@ function Myroute() {
           <Route path='apply' element={<Applying />} />
           <Route path='Booking' element={<Booking/>} />
           <Route path='email/confirmation/:token' element={<EmailVerify/>} />
+          <Route path='confirm' element={<ConfirmOrder/>} />
 
 
           
