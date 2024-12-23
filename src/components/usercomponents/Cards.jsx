@@ -20,19 +20,7 @@ const Cards = (props) => {
             <p className="text-sm text-gray-500 dark:text-gray-400">Category: {category.category_name}</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">Instructor: {instructor || 'N/A'}</p>
             <p className="text-sm text-gray-500 dark:text-gray-400">Duration: {duration || 'N/A'}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Schedule: 
-              {schedule.length > 0 ? (
-                <ul>
-                  {schedule.map((item, index) => (
-                    <li key={index}>
-                      {item.day}: {item.time}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                'No schedule available'
-              )}
-            </p>
+           
           </div>
 
           <p className="text-lg font-extrabold leading-tight text-gray-900 dark:text-white mb-5">Rs. {product_price}</p>

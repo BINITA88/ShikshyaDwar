@@ -19,6 +19,7 @@ import Applying from './components/usercomponents/Applying';
 import UpdateProduct from './pages/adminpages/UpdateProduct';
 import ProductDetail from './pages/userpages/ProductDetail';
 import Cart from './pages/userpages/Cart';
+import Booking from './pages/userpages/Booking';
 
 
 function Myroute() {
@@ -49,7 +50,7 @@ function Myroute() {
           <Route path='cart' element={<Cart />} />
           <Route path='productdetail/:productId' element={<ProductDetail />} />
           <Route path='apply' element={<Applying />} />
-
+          <Route path='Booking' element={<Booking/>} />
           <Route path='email/confirmation/:token' element={<EmailVerify/>} />
 
 

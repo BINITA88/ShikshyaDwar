@@ -70,14 +70,7 @@ const Header = () => {
 
         {/* Right Section */}
         <div className={`hidden md:flex items-center `}> {/* Reduced gap here */}
-          <div className="relative">
-            <Link to="cart">
-              <FaCartArrowDown size={24} className={isScrolled ? 'text-black' : 'text-white'} />
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                3
-              </span>
-            </Link>
-          </div>
+          
 
           {isAuthenticated() && isAuthenticated().user.role === 0 && (
             <button
@@ -119,7 +112,7 @@ const Header = () => {
             </li>
             <li>
               <Link to="/product" className="text-gray-900 dark:text-white hover:underline">
-                Classes
+                Courses
               </Link>
             </li>
             <li>

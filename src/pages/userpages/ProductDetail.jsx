@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetail = () => {
   const [product, setProduct] = useState({});
   const param = useParams();
+  const navigate = useNavigate(); // Initialize navigate
   const id = param.productId;
 
   useEffect(() => {
     axios
       .get(`/api/productDetail/${id}`)
-      .then((res) => setProduct(res.data))  // Assuming res.data contains instructor, schedule, and duration
+      .then((res) => setProduct(res.data)) // Assuming res.data contains instructor, schedule, and duration
       .catch((err) => console.log(err));
   }, [id]);
 
@@ -28,12 +29,12 @@ const ProductDetail = () => {
       description: product.product_description,
       category: product.category,
       quantity: 1,
-      instructor: product.instructor,    // Added instructor
-      schedule: product.schedule,        // Added schedule
-      duration: product.duration         // Added duration
+      instructor: product.instructor, // Added instructor
+      schedule: product.schedule, // Added schedule
+      duration: product.duration, // Added duration
     };
 
-    const existingItem = cartItems.find(item => item.id === product._id);
+    const existingItem = cartItems.find((item) => item.id === product._id);
     if (existingItem) {
       toast.error("Item is already present in your cart!");
     } else {
@@ -56,15 +57,23 @@ const ProductDetail = () => {
     return schedule; // Return as is if not an array
   };
 
+  const BookingHandler = () => {
+    const isAuthenticated = JSON.parse(localStorage.getItem('jwt'));
+    if (isAuthenticated) {
+      navigate('/Booking');
+    } else {
+      navigate('/login?redirect=Booking');
+    }
+  };
+
   return (
     <>
-      <ToastContainer theme='colored' position='top-center'/>
+      <ToastContainer theme="colored" position="top-center" />
       <div className="bg-gray-100">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-wrap -mx-4">
             {/* Left Column */}
             <div className="w-full md:w-1/2 px-4 mb-8">
-              {/* Main Image */}
               <img
                 src={`http://localhost:9000/${product.product_image}`} // Dynamic main image source
                 alt="Product"
@@ -96,24 +105,25 @@ const ProductDetail = () => {
               {/* Action Buttons */}
               <div className="flex space-x-4 mb-6">
                 <button
-                  onClick={addtoCart}
+                  onClick={BookingHandler}
                   className="bg-yellow-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700"
                 >
-                  Add to Schedule
+                  Book classes
                 </button>
+              
               </div>
 
               {/* Instructor and Duration */}
               <div className="mt-6">
-                <p><strong>Instructor:</strong> {product.instructor}</p>
-                <p><strong>Duration:</strong> {product.duration}</p>
+                <p>
+                  <strong>Instructor:</strong> {product.instructor}
+                </p>
+                <p>
+                  <strong>Duration:</strong> {product.duration}
+                </p>
               </div>
 
-              {/* Schedule Section */}
-              <div className="mt-6">
-                <h3 className="text-lg font-semibold mb-2">Schedule:</h3>
-                <p className="text-gray-700">{formatSchedule(product.schedule)}</p>  {/* Using formatSchedule function */}
-              </div>
+              
 
               {/* Key Features Section */}
               <div className="mt-6">
