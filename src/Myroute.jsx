@@ -18,9 +18,8 @@ import EmailVerify from './auth/EmailVerify';
 import Applying from './components/usercomponents/Applying';
 import UpdateProduct from './pages/adminpages/UpdateProduct';
 import ProductDetail from './pages/userpages/ProductDetail';
-import Cart from './pages/userpages/Cart';
 import Booking from './pages/userpages/Booking';
-import ConfirmOrder from './pages/userpages/ConfirmOrder';
+import ConfirmBooking from './pages/userpages/ConfirmBooking';
 
 
 function Myroute() {
@@ -48,12 +47,12 @@ function Myroute() {
           <Route path='register' element={<Register/>} />
           <Route path='login' element={<Signinpage/>} />
           <Route path='product' element={<Product />} />
-          <Route path='cart' element={<Cart />} />
+
           <Route path='productdetail/:productId' element={<ProductDetail />} />
           <Route path='apply' element={<Applying />} />
           <Route path='Booking' element={<Booking/>} />
           <Route path='email/confirmation/:token' element={<EmailVerify/>} />
-          <Route path='confirm' element={<ConfirmOrder/>} />
+          <Route path='confirm' element={<ConfirmBooking/>} />
 
 
           
