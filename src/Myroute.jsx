@@ -20,6 +20,9 @@ import UpdateProduct from './pages/adminpages/UpdateProduct';
 import ProductDetail from './pages/userpages/ProductDetail';
 import Booking from './pages/userpages/Booking';
 import ConfirmBooking from './pages/userpages/ConfirmBooking';
+import PaymentElement from './pages/userpages/PaymentElement';
+import Success from './pages/userpages/Success';
+import Student from './components/admincomponents/Student';
 
 
 function Myroute() {
@@ -35,15 +38,20 @@ function Myroute() {
         <Route path='categorylist' element={<CategoryList/>} />
         <Route path='updateproduct/:productId' element={<UpdateProduct/>} />
         <Route path='addcategory' element={<Addcategory/>} />
+        <Route path='students' element={<Student/>} />
+        
 {/* need to fix in email one
  */}
  {/* capture values from the URL and use them in your application. */}
         
         
         </Route>
+        <Route path='success' element={<Success/>}/>
         {/* route for user page */}
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePages />} />
+          <Route path='payment' element={<PaymentElement/>}/>
+
           <Route path='register' element={<Register/>} />
           <Route path='login' element={<Signinpage/>} />
           <Route path='product' element={<Product />} />
@@ -57,7 +65,9 @@ function Myroute() {
 
           
         </Route>
+
       </Routes>
+
     </Router>
   );
 }

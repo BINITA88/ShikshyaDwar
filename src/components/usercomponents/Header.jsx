@@ -101,7 +101,7 @@ const Header = () => {
 
       {/* Secondary Navigation */}
       <div
-        className={`bg-sky-100 dark:bg-gray-700 shadow-md md:block ${menuOpen ? 'block' : 'hidden'}`}
+        className={`bg-slate-800 dark:bg-gray-700 shadow-md md:block ${menuOpen ? 'block' : 'hidden'}`}
       >
         <div className="max-w-screen-xl px-4 py-3 mx-auto">
           <ul className="flex flex-col md:flex-row font-medium md:space-x-8 text-sm">
@@ -116,14 +116,14 @@ const Header = () => {
               </Link>
             </li>
             <li>
-              <Link to="#" className="text-gray-900 dark:text-white hover:underline">
-                Team
+              <Link to="/apply" className="text-gray-900 dark:text-white hover:underline">
+                Admission
               </Link>
             </li>
             <li>
-              <Link to="#" className="text-gray-900 dark:text-white hover:underline">
+              {/* <Link to="#" className="text-gray-900 dark:text-white hover:underline">
                 Features
-              </Link>
+              </Link> */}
             </li>
           </ul>
         </div>

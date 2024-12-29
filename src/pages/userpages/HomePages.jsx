@@ -31,12 +31,38 @@ const HomePages = () => {
   return (
     <>
       <Carousel />
+        <div>
+
+        </div>
+   
+{/* Display Cards dynamically */}
+<section className="py-14 px-10 bg-gradient-to-r from-white to-white">
+  <div className="w-full">
+    {/* Main Heading for Shikshyadwar */}
+    <h2 className="text-3xl mt-7 mb-11 ml-10 font-bold text-gray-800 mb-4 text-start leading-tight">
+    Explore Our Available Courses
+    </h2>
 
 
-      {/* Display Cards dynamically */}
-      <section className="py-14">
-        <div className="mx-auto max-w-7xl px-8 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+    
+    {/* Course Cards */}
+    <div className="mx-auto flex px-8 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-14">
+        {products.length > 0 ? (
+          products.map((product) => <Cards data={product} key={product._id} />)
+        ) : (
+          <p className="col-span-full text-center text-xl text-gray-500">No products available.</p>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+      <AdmissionDescription />
+      
+      {/* <section className="py-14  px-10 flex justify-start">
+        <div className="mx-auto flex px-8 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-14">
             {products.length > 0 ? (
               products.map((product) => <Cards data={product} key={product._id} />)
             ) : (
@@ -44,8 +70,7 @@ const HomePages = () => {
             )}
           </div>
         </div>
-      </section>
-      <AdmissionDescription />
+      </section> */}
       <Chatbox />
       <Library />
     </>

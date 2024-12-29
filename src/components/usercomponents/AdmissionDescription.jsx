@@ -3,7 +3,7 @@ import AdmissionImage from '../../assets/img/discuss.jpg';
 
 const AdmissionDescription = () => {
   return (
-    <div className="w-full flex flex-col md:flex-row  p-6 md:p-12 bg-gray-100 mt-1">
+    <div className="w-full mt-4 flex flex-col md:flex-row  p-6 md:p-12 bg-gray-50 mt-1">
       <div className="md:w-1/2 relative flex justify-center items-center">
         <img
           style={{ width: '100%', maxWidth: '500px', height: 'auto' }} // Responsive image size
@@ -29,7 +29,7 @@ const AdmissionDescription = () => {
             Education leads to understanding of important concepts and mastery of essential skills through instruction which is based on well-researched philosophies of teaching and learning strategies.
           </p>
           <a
-            href="/learn-more"
+            href="/apply"
             className="bg-pink-800 text-white px-6 py-3 rounded-full font-semibold hover:bg-red-700 transition duration-300 transform hover:scale-105"
           >
             Learn More

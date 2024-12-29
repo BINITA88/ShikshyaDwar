@@ -1,48 +1,96 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Eye, Clock, User, Tag, Trophy } from 'lucide-react';
 
-const Cards = (props) => {
-  const { _id, product_name, product_image, category, product_price, product_description, instructor, schedule, duration } = props.data;
+const Cards = ({ data }) => {
+  const {
+    _id,
+    product_name,
+    product_image,
+    category,
+    product_price,
+    instructor,
+    duration,
+    prize
+  } = data;
 
-  
-  
-  
   return (
-    <>
-      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div className="h-56 w-full">
-          <a href="#">
-            <img className="mx-auto h-full dark:hidden" src={`http://localhost:9000/${product_image}`} alt={product_name} />
-            <img className="mx-auto hidden h-full dark:block" src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg" alt="" />
-          </a>
-        </div>
-        <div className="pt-6">
-          <a href="#" className="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white">{product_name}</a>
-
-          <div className="mt-2">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Category: {category.category_name}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Instructor: {instructor || 'N/A'}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Duration: {duration || 'N/A'}</p>
-           
-          </div>
-
-          <p className="text-lg font-extrabold leading-tight text-gray-900 dark:text-white mb-5">Rs. {product_price}</p>
-          
-          <Link to={`/productdetail/${_id}`}>
-            <button
-              type="button"
-              className="inline-flex items-center rounded-lg bg-yellow-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              <svg className="h-5 w-5 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-width="2" d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
-                <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-              </svg>
-              View Detail
-            </button>
-          </Link>
+    <Link
+      to={`/productdetail/${_id}`}
+      className="relative flex flex-col justify-start overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-800 dark:border-gray-700"
+      style={{ overflow: "hidden" }} // Enforce containment
+    >
+      {/* Image Container */}
+      <div className="relative h-64  overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10" />
+        <img
+          className="h-full w-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
+          src={`http://localhost:9000/${product_image}`}
+          alt={product_name}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg";
+          }}
+        />
+        
+        {/* Price and Prize Tags */}
+        <div className="relative top-4 right-4 flex flex-col gap-2 z-20">
+          {product_price && (
+            <div className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
+              <span className="text-sm font-bold text-yellow-500">Rs. {product_price}</span>
+            </div>
+          )}
+          {prize && (
+            <div className="bg-yellow-400/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+              <Trophy className="h-4 w-4 text-yellow-700" />
+              <span className="text-sm font-semibold text-yellow-700">{prize}</span>
+            </div>
+          )}
         </div>
       </div>
-    </>
+
+      {/* Content */}
+      <div className="p-6">
+        {/* Category Badge */}
+        <div className="mb-3">
+          <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+            <Tag className="h-3 w-3 mr-1" />
+            {category.category_name}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-200 dark:text-white line-clamp-2">
+          {product_name}
+        </h3>
+
+        {/* Details */}
+        <div className="space-y-2 mb-6">
+          {instructor && (
+            <div className="flex items-center text-gray-600 dark:text-gray-300">
+              <User className="h-4 w-4 mr-2" />
+              <span className="text-sm font-medium">{instructor}</span>
+            </div>
+          )}
+          
+          {duration && (
+            <div className="flex items-center text-gray-600 dark:text-gray-300">
+              <Clock className="h-4 w-4 mr-2" />
+              <span className="text-sm font-medium">{duration}</span>
+            </div>
+          )}
+        </div>
+
+        {/* View Detail Button */}
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-yellow-700 to-yellow-600 px-5 py-3 text-sm font-medium text-white transition-all duration-200 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          <Eye className="h-5 w-5" />
+          View Details
+        </button>
+      </div>
+    </Link>
   );
 };
 

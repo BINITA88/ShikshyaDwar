@@ -1,98 +1,149 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { isAuthenticated } from "../../auth";
-const Addcategory = () => {
-  const [category_name,setCategory]=useState("");
-  const[error ,setError]=useState(false)
-  const[success,setSucess] =useState(false)
-  const{token}=isAuthenticated()
+import { AlertCircle, CheckCircle, Loader2 } from "lucide-react";
 
-const onHandleChange =(e)=>{
-  setError('')
-  setCategory(e.target.value.toLowerCase())
-}
+const AddCategory = () => {
+  const [category_name, setCategory] = useState("");
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { token } = isAuthenticated();
 
-const handleSubmit = (e)=>{
-  e.preventDefault()
-  setSucess('')
-  setSucess(false)
- 
-  const addCategory = (token,category)=>{
-    return fetch(`/api/postcategory`,{
-      method:"POST",
-      headers:{
-        Accept:"application/json",
-        "Content-Type":"application/json",
-        Authorization:`Bearer ${token}`
-      },
-      body:JSON.stringify(category)
-    })
-    .then(res=>{
-      return res.json()
-    })
-    .catch(err=>console.log(err))
-  }
+  const onHandleChange = (e) => {
+    setError('');
+    setCategory(e.target.value.toLowerCase());
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess(false);
 
-addCategory(token,{category_name})
-.then((data)=>{
-  if(data && data.error){
-    setError(data.error)
-  }else{
-  setError('')
-  setSucess(true)
-  setCategory('')
-}
-})
-.catch((err)=>{
-  console.log(err)
-  setError('something went wrong')
-})
-}
+    if (!category_name.trim()) {
+      setError('Category name is required');
+      setLoading(false);
+      return;
+    }
 
- //  to show error message
- const showError =()=>{
-  return(
-      <div className='bg-red-100 text-red-800 p-4 rounded-lg' style={{display:error ?
-          "":'none' }} role='alert'>
-              <strong className='font-bold text-sm mr-2'>Error!</strong>
-              <span className='block text-sm sm:inline max-sm:mt-2'>{error}</span>
-          </div>
-    
-  )
-}
+    try {
+      const response = await fetch(`/api/postcategory`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ category_name })
+      });
 
-const showSuccess=()=>{
-return(
-  <div className='bg-green-100 text-green-800 p-4 rounded-lg' style={{display:success?
-      "":'none' }} role='alert'>
-          <strong className='font-bold text-sm mr-2'>Success!</strong>
-          <span className='block text-sm sm:inline max-sm:mt-2'>Your account has been Created successfully.kindly verify your email </span>
-      </div>
-)
-}
+      const data = await response.json();
+
+      if (data && data.error) {
+        setError(data.error);
+      } else {
+        setError('');
+        setSuccess(true);
+        setCategory('');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <>
-    {showError()}
-    {showSuccess()}
-<form className="max-w-md mx-auto">
-  <div className="relative z-0 w-full mb-5 group">
-      <input type="text" 
-      
-      onChange={onHandleChange}
-      value={category_name}
-      
-      name="floating_email" id="floating_email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-      <label for="floating_email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Category</label>
-  </div>
- 
-  <button type="submit" 
-  onClick={handleSubmit}
-  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
-</form>
+    <div className="min-h-screen bg-gray-50 py-12">
+      <div className="max-w-3xl mx-auto px-4">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900">Add New Category</h2>
+          <p className="mt-2 text-gray-600">Create a new category for organizing courses</p>
+        </div>
 
-   </>
+        {/* Alerts Container */}
+        <div className="max-w-lg mx-auto mb-6">
+          {error && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
+              <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0" />
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
+          {success && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200">
+              <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
+              <p className="text-sm text-green-700">Category has been created successfully</p>
+            </div>
+          )}
+        </div>
+
+        {/* Form Card */}
+        <div className="max-w-lg mx-auto">
+          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="space-y-4">
+              <div>
+                <label 
+                  htmlFor="category_name" 
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Category Name
+                </label>
+                <input
+                  type="text"
+                  id="category_name"
+                  value={category_name}
+                  onChange={onHandleChange}
+                  className="block w-full px-3 py-2 rounded-md border border-gray-300 shadow-sm 
+                           focus:ring-2 focus:ring-pink-500 focus:border-pink-500 
+                           transition-colors duration-200 text-sm"
+                  placeholder="Enter category name"
+                  required
+                />
+                <p className="mt-1.5 text-xs text-gray-500">
+                  Use a unique and descriptive name for the category
+                </p>
+              </div>
+
+              <div className="flex items-center justify-end pt-4 space-x-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCategory('');
+                    setError('');
+                    setSuccess(false);
+                  }}
+                  className="px-4 py-2 rounded-md border border-gray-300 text-sm font-medium
+                           text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 
+                           focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200"
+                >
+                  Clear
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="px-4 py-2 rounded-md bg-pink-600 text-sm font-medium text-white 
+                           hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                           focus:ring-pink-500 transition-colors duration-200 
+                           disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+                      Creating...
+                    </>
+                  ) : (
+                    'Create Category'
+                  )}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Addcategory;
+export default AddCategory;
