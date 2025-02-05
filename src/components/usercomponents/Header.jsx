@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaCartArrowDown, FaBars, FaTimes } from "react-icons/fa";
+import { FaCartArrowDown, FaBars, FaTimes, FaBell } from "react-icons/fa";
 import LogoImage from '../../assets/img/logo.png';
 import { isAuthenticated, signout } from '../../auth';
+import { FaFacebookMessenger } from "react-icons/fa6";
+import profile from '../../assets/img/profile.png';
 
 const Header = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // State for toggling the mobile menu
+  const [dropdownOpen, setDropdownOpen] = useState(false); // State for toggling the profile dropdown
 
-  // Handle scroll event to toggle 'isScrolleddd'
+  // Handle scroll event to toggle 'isScrolled'
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -29,8 +32,16 @@ const Header = () => {
     navigate('/login');
   };
 
+  const handleMessageClick = () => {
+    navigate('/conversation');
+  };
+
   const handleRegisterClick = () => {
     navigate('/register');
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   const headerStyle = {
@@ -69,33 +80,87 @@ const Header = () => {
         </button>
 
         {/* Right Section */}
-        <div className={`hidden md:flex items-center `}> {/* Reduced gap here */}
-          
-
-          {isAuthenticated() && isAuthenticated().user.role === 0 && (
-            <button
-              onClick={() => signout(() => navigate('/login'))}
-              className={`text-sm px-5 py-2.5 gap-4 rounded-lg text-white font-semibold`}
-            >
-              Logout
-            </button>
-          )}
-
-          {!isAuthenticated() && (
-            <button
-              onClick={handleLoginClick}
-              className={`text-sm px-5 py-2.5 rounded-lg ${textColor} font-semibold`} // Button text color change here
-            >
-              Login
-            </button>
-          )}
-
+        <div className={`hidden md:flex items-center space-x-4`}> {/* Added space-x-4 here */}
+          {/* Messenger Button */}
           <button
-            onClick={handleRegisterClick}
-            className={`text-sm px-5 py-2.5 rounded-lg ${textColor} font-semibold`} // Button text color change here
+            onClick={handleMessageClick}
+            className={`text-sm px-5 py-2.5 rounded-lg ${textColor} font-semibold`}
           >
-            Register
+            <FaFacebookMessenger size={20} />
           </button>
+
+       {/* Notification Button */}
+       <div className="relative">
+      <Link to="/notice">
+        <FaBell size={26} className="text-yellow-300" />
+        <span
+          className={`absolute bottom-4 right-0 text-sm font-bold rounded-full ${
+            isScrolled ? 'text-black' : 'text-white'
+          }`}
+        >
+          15
+        </span>
+      </Link>
+    </div>
+
+
+          {/* Profile Dropdown */}
+          <div className="relative">
+            <button onClick={toggleDropdown} className="flex items-center">
+              <img src={profile} alt="Profile" className="w-10 h-10 rounded-full" />
+            </button>
+
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
+                {!isAuthenticated() && (
+                  <button
+                    onClick={handleLoginClick}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Login
+                  </button>
+                )}
+
+                <Link
+                  to="/register"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={handleRegisterClick}
+                >
+                  Register
+                </Link>
+
+                <Link
+                  to="/apply"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Mock Test
+                </Link>
+
+                <Link
+                  to="/routine"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Routine
+                </Link>
+
+                <Link
+                  to="/notice"
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Notice
+                </Link>
+
+                {isAuthenticated() && isAuthenticated().user.role === 0 && (
+                  <button
+                    onClick={() => signout(() => navigate('/login'))}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
@@ -114,16 +179,6 @@ const Header = () => {
               <Link to="/product" className="text-gray-900 dark:text-white hover:underline">
                 Courses
               </Link>
-            </li>
-            <li>
-              <Link to="/apply" className="text-gray-900 dark:text-white hover:underline">
-                Admission
-              </Link>
-            </li>
-            <li>
-              {/* <Link to="#" className="text-gray-900 dark:text-white hover:underline">
-                Features
-              </Link> */}
             </li>
           </ul>
         </div>

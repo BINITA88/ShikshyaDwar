@@ -43,7 +43,9 @@ const Signinpage = () => {
     if (redirectToPage) {
       if (user && user.role === 1) {
         navigate('/admin');
-      } else {
+      } else if (user && user.role === 2)  {
+        navigate('/instructor');
+      }else{
         navigate('/');
       }
     }

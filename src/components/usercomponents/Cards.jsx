@@ -11,7 +11,8 @@ const Cards = ({ data }) => {
     product_price,
     instructor,
     duration,
-    prize
+    prize,
+    product_video,  // Assuming 'product_video' is the field for the video file URL
   } = data;
 
   return (
@@ -20,19 +21,31 @@ const Cards = ({ data }) => {
       className="relative flex flex-col justify-start overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl dark:bg-gray-800 dark:border-gray-700"
       style={{ overflow: "hidden" }} // Enforce containment
     >
-      {/* Image Container */}
-      <div className="relative h-64  overflow-hidden">
+      {/* Media Container */}
+      <div className="relative h-64 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10" />
-        <img
-          className="h-full w-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
-          src={`http://localhost:9000/${product_image}`}
-          alt={product_name}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = "https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg";
-          }}
-        />
-        
+
+        {/* Video or Image */}
+        {product_video ? (
+          <video
+            className="h-full w-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
+            controls
+          >
+            <source src={`http://localhost:9000/${product_video}`} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <img
+            className="h-full w-full object-cover object-center transform transition-transform duration-300 group-hover:scale-105"
+            src={`http://localhost:9000/${product_image}`}
+            alt={product_name}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg";
+            }}
+          />
+        )}
+
         {/* Price and Prize Tags */}
         <div className="relative top-4 right-4 flex flex-col gap-2 z-20">
           {product_price && (
@@ -72,7 +85,7 @@ const Cards = ({ data }) => {
               <span className="text-sm font-medium">{instructor}</span>
             </div>
           )}
-          
+
           {duration && (
             <div className="flex items-center text-gray-600 dark:text-gray-300">
               <Clock className="h-4 w-4 mr-2" />

@@ -5,6 +5,7 @@ import Library from '../../components/usercomponents/Library';
 import Chatbox from '../../components/usercomponents/Chatbot';
 import Cards from '../../components/usercomponents/Cards';
 import axios from 'axios';
+import Carousel1 from '../../components/usercomponents/Carousel1';
 
 const HomePages = () => {
   const [products, setProducts] = useState([]);
@@ -31,6 +32,7 @@ const HomePages = () => {
   return (
     <>
       <Carousel />
+   
         <div>
 
         </div>
@@ -42,9 +44,6 @@ const HomePages = () => {
     <h2 className="text-3xl mt-7 mb-11 ml-10 font-bold text-gray-800 mb-4 text-start leading-tight">
     Explore Our Available Courses
     </h2>
-
-
-    
     {/* Course Cards */}
     <div className="mx-auto flex px-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-14">
@@ -71,6 +70,9 @@ const HomePages = () => {
           </div>
         </div>
       </section> */}
+
+<Carousel1/>
+
       <Chatbox />
       <Library />
     </>

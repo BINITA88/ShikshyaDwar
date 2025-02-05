@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { Link, Outlet, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { TbCategoryFilled } from "react-icons/tb";
 import { isAuthenticated, signout } from "../../auth";
-
+import { FaBookReader } from "react-icons/fa";
+import { AiTwotoneSchedule } from "react-icons/ai";
 const AdminHeader = () => {
   const [dropdowns, setDropdowns] = useState({
     course: false,
     category: false,
+    routine: false,
   });
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
@@ -42,6 +44,10 @@ const AdminHeader = () => {
         return 'Add Category';
       case '/admin/categorylist':
         return 'Category List';
+      case '/admin/addschedule':
+        return 'Add Routine';
+      case '/admin/schedulelist':
+        return 'Routine List';
       case '/admin/students':
         return 'Students';
       default:
@@ -85,7 +91,6 @@ const AdminHeader = () => {
         } sm:translate-x-0`}
       >
         <div className="h-full flex flex-col bg-gradient-to-b from-pink-800 to-pink-900 shadow-2xl">
-          {/* Rest of the sidebar code remains the same */}
           {/* Admin Profile Section */}
           <div className="p-6 border-b border-pink-700/50">
             <div className="flex items-center space-x-4">
@@ -133,19 +138,11 @@ const AdminHeader = () => {
                     ${dropdowns.course ? 'bg-pink-700 text-white' : 'text-pink-100 hover:bg-pink-700/50'}`}
                 >
                   <div className="flex items-center">
-                    <svg
-                      className="w-5 h-5"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M15 12a1 1 0 0 0 .962-.726l2-7A1 1 0 0 0 17 3H3.77L3.175.745A1 1 0 0 0 2.208 0H1a1 1 0 0 0 0 2h.438l.6 2.255v.019l2 7 .746 2.986A3 3 0 1 0 9 17a2.966 2.966 0 0 0-.184-1h2.368c-.118.32-.18.659-.184 1a3 3 0 1 0 3-3H6.78l-.5-2H15Z" />
-                    </svg>
+                    <FaBookReader />
                     <span className="ms-3">Courses</span>
                   </div>
                   <svg
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      dropdowns.course ? 'rotate-180' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-200 ${dropdowns.course ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -187,9 +184,7 @@ const AdminHeader = () => {
                     <span className="ms-3">Categories</span>
                   </div>
                   <svg
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      dropdowns.category ? 'rotate-180' : ''
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-200 ${dropdowns.category ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -219,8 +214,50 @@ const AdminHeader = () => {
                 </div>
               </li>
 
+              {/* Routine Dropdown */}
+              <li>
+                <button
+                
+                  onClick={() => toggleDropdown("routine")}
+                  className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200
+                    ${dropdowns.routine ? 'bg-pink-700 text-white' : 'text-pink-100 hover:bg-pink-700/50'}`}
+                >
+                  <AiTwotoneSchedule />
+                  <span className="ms-3">Routines</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform duration-200 ${dropdowns.routine ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                  
+                </button>
+                <div className={`mt-2 space-y-1 ${dropdowns.routine ? 'block' : 'hidden'}`}>
+                  <Link
+                    to="/admin/addschedule"
+                    className={`flex items-center pl-11 p-3 rounded-lg transition-all duration-200
+                      ${isActive('/admin/addschedule') 
+                        ? 'bg-pink-700 text-white' 
+                        : 'text-pink-100 hover:bg-pink-700/50'}`}
+                  >
+                    Add Routine
+                  </Link>
+                  <Link
+                    to="/admin/schedulelist"
+                    className={`flex items-center pl-11 p-3 rounded-lg transition-all duration-200
+                      ${isActive('/admin/schedulelist') 
+                        ? 'bg-pink-700 text-white' 
+                        : 'text-pink-100 hover:bg-pink-700/50'}`}
+                  >
+                    Routine List
+                  </Link>
+                </div>
+              </li>
+
               {/* Students */}
-              {/* <li>
+              <li>
                 <Link
                   to="/admin/students"
                   className={`flex items-center p-3 rounded-lg transition-all duration-200 group
@@ -229,18 +266,18 @@ const AdminHeader = () => {
                       : 'text-pink-100 hover:bg-pink-700/50'}`}
                 >
                   <svg
-                    className="w-5 h-5"
+                    className="w-5 h-5 transition-colors duration-200"
                     fill="currentColor"
-                    viewBox="0 0 20 20"
+                    viewBox="0 0 24 24"
                   >
-                    <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z" />
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4Z" />
+                    <path d="M21 20c0-2-2-3-3.5-3s-3.5 1-3.5 3h-11c0-2-2-3-3.5-3s-3.5 1-3.5 3H3c0-3 2-4 5-4h6c3 0 5 1 5 4Z" />
                   </svg>
                   <span className="ms-3">Students</span>
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </nav>
-
           {/* Sign Out Button */}
           <div className="p-4 border-t border-pink-700/50">
             <button
@@ -258,14 +295,13 @@ const AdminHeader = () => {
               <span className="ms-3">Sign Out</span>
             </button>
           </div>
+        
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="p-4 sm:ml-64 mt-16">
-        <div className="p-6 bg-white rounded-xl shadow-sm">
-          <Outlet />
-        </div>
+      {/* Content */}
+      <div className="sm:ml-64 p-4">
+        <Outlet />
       </div>
     </>
   );

@@ -1,5 +1,7 @@
 // import { API } from '../../config'
 
+// import { useAuthContext } from "../context/AuthContext"
+
 
 // FOR SIGN UP PAGE 
 export const signup =user =>{
@@ -45,9 +47,13 @@ export const signup =user =>{
 
 // AUTHENTICATION AND TO STORE TOKEN IN LOCAL STORAGE
         export const authenticate =( data, next)=>{
+            // const{setAuthUser} =useAuthContext()
             if(typeof window  !== 'undefined'){
              localStorage.setItem('jwt',JSON.stringify(data))
+            //  context 
+            
              next()
+            //  setAuthUser(data)
             }
         }
 

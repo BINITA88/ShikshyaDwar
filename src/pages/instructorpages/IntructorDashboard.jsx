@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { FaFacebookMessenger } from "react-icons/fa6";
 import { isAuthenticated } from "../../auth";
 import axios from "axios";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Dashboard = () => {
+const IntructorDashboard = () => {
   const [categoryCount, setCategoryCount] = useState(0);
   const [productCount, setProductCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
@@ -152,24 +153,12 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="bg-white p-6 rounded-xl shadow-lg">
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold text-gray-800 mb-1">Categories</h3>
-            <p className="text-sm text-gray-500">Total active categories</p>
-          </div>
-          <div className="h-64">
-            <Pie data={categoryPieData} options={chartOptions} />
-          </div>
-          <div className="mt-4 text-center">
-            <span className="text-2xl font-bold text-gray-800">{categoryCount}</span>
-            <span className="text-sm text-gray-500 ml-2">of 20 slots used</span>
-          </div>
-        </div>
+        
 
-        <div className="bg-white p-6 rounded-xl shadow-lg">
+        {/* <div className="bg-white p-6 rounded-xl shadow-lg">
           <div className="mb-4">
-            <h3 className="text-xl font-semibold text-gray-800 mb-1">Courses</h3>
-            <p className="text-sm text-gray-500">Total available Courses</p>
+            <h3 className="text-xl font-semibold text-gray-800 mb-1">Messages</h3>
+            <p className="text-sm text-gray-500">Total available messages</p>
           </div>
           <div className="h-64">
             <Pie data={productPieData} options={chartOptions} />
@@ -178,7 +167,7 @@ const Dashboard = () => {
             <span className="text-2xl font-bold text-gray-800">{productCount}</span>
             <span className="text-sm text-gray-500 ml-2">of 100 slots used</span>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <div className="mb-4">
@@ -198,13 +187,7 @@ const Dashboard = () => {
       <div className="mt-8 bg-white p-6 rounded-xl shadow-lg">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-4 bg-blue-50 rounded-lg">
-            <div className="text-sm text-blue-600 mb-1">Categories Status</div>
-            <div className="text-2xl font-bold text-blue-700">{categoryCount}</div>
-            <div className="text-sm text-blue-600">
-              {((categoryCount / 20) * 100).toFixed(1)}% utilized
-            </div>
-          </div>
+          
           <div className="p-4 bg-yellow-50 rounded-lg">
             <div className="text-sm text-yellow-600 mb-1">Products Status</div>
             <div className="text-2xl font-bold text-yellow-700">{productCount}</div>
@@ -225,4 +208,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default IntructorDashboard;
