@@ -6,7 +6,7 @@ test.describe('API Login Endpoint', () => {
   test('should log in a user successfully', async ({ request }) => {
     const loginResponse = await request.post('http://localhost:9000/api/login', {
       data: {
-        email: 'karan@gmail.com', // Ensure this user exists in the database
+        email: 'karan@gmail.com', 
         password: 'Karan@123' // Use correct password
       }
     });
