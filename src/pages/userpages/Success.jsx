@@ -49,7 +49,7 @@ const Success = () => {
 
 
               <div className="grid gap-6 md:grid-cols-2">
-                {/* Email Confirmation */}
+
                 <div className="bg-blue-50 rounded-2xl p-6 flex items-start space-x-4">
                   <Mail className="h-6 w-6 text-pink-800 flex-shrink-0 mt-1" />
                   <div>
