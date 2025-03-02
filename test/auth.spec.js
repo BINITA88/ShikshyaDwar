@@ -7,7 +7,7 @@ test.describe('API Login Endpoint', () => {
     const loginResponse = await request.post('http://localhost:9000/api/login', {
       data: {
         email: 'karan@gmail.com', 
-        password: 'Karan@123' // Use correct password
+        password: 'Karan@123' 
       }
     });
 
