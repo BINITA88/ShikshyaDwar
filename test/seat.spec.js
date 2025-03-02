@@ -17,7 +17,7 @@ test.describe('Exam Seat API Tests', () => {
 
 //     const responseBody = await response.json();
 //     console.log('Create Response:', responseBody);
-
+// set
 //     expect(response.status()).toBe(201);
 //     expect(responseBody).toHaveProperty('newSeat.seatNumber', seatNumber);
 //   });
