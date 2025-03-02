@@ -21,7 +21,7 @@ test.describe('API Register Endpoint', () => {
     // ✅ Accepts both 200 and 201
     expect([200, 201]).toContain(response.status());
 
-    // ✅ Ensure response contains the expected message
+
     expect(responseBody).toHaveProperty('message', 'Registration successful! Please check your email to verify your account.');
   });
 
