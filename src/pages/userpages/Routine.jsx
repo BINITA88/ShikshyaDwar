@@ -57,7 +57,6 @@ const Routine = () => {
   const times = [...new Set(schedule.map((item) => item.time))].sort();
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-  /** If User is NOT Logged In - Show Message */
   if (!token) {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
