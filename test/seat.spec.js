@@ -21,20 +21,6 @@ test.describe('Exam Seat API Tests', () => {
     expect(Array.isArray(responseBody)).toBe(true);
   });
 
-//   // ✅ Test 3: Get available and unavailable seat status
-//   test('should retrieve seat status', async ({ request }) => {
-//     const response = await request.get(`${BASE_URL}/status`);
-
-//     console.log('Seat Status Response Status:', response.status());
-//     if (response.status() === 404) test.fail('API route not found!');
-
-//     const responseBody = await response.json();
-//     console.log('Seat Status Response:', responseBody);
-
-//     expect(response.status()).toBe(200);
-//     expect(responseBody).toHaveProperty('availableSeats');
-//     expect(responseBody).toHaveProperty('bookedSeats');
-//   });
 
   // ✅ Test 4: Book a seat
   test('should book a seat', async ({ request }) => {
