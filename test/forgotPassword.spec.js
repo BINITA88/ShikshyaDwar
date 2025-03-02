@@ -35,7 +35,6 @@ test.describe('API Forget Password Endpoint', () => {
 
     expect([400, 404]).toContain(response.status());
 
-    // ✅ Fix: Match exact response string
     expect(responseBody).toHaveProperty('error', 'sorry the email you have provided is not found in our system.');
   });
 
