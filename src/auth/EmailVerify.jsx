@@ -1,72 +1,48 @@
-import React,{useState,useEffect} from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EmailVerify = () => {
-    const param= useParams()
-    const[values,setValues]=useState({
-        error:"",
-        success:false
-    
-    })
-    const {error,success} =values
+  const param = useParams();
+  const navigate = useNavigate();
 
-   {/* verify process */}
-   useEffect(()=>{
-    const token =param.token
-    fetch(`/api/confirmation/${token}`,{
-        method:'POST',
-        headers:{
-            Accept:"application/json",
-            "Content-Type":"application/json"
-            
-            },
+  useEffect(() => {
+    const token = param.token;
 
-    })
-    .then(res=>res.json())
-    .then(data=>{
-        if(data.error){
-            setValues({...values,error:data.error})
-        }
-        else{
-            setValues({...values,error:'',success:true})
-        
-            
-        }
-    })
-    .catch(err=>console.log(err))
-   },[param.token])
-
-
-      //  to show error message
-      const showError =()=>{
-        return(
-            <div className='bg-red-100 text-red-800 p-4 rounded-lg' style={{display:error ?
-                "":'none' }} role='alert'>
-                    <strong className='font-bold text-sm mr-2'>Error!</strong>
-                    <span className='block text-sm sm:inline max-sm:mt-2'>{error}</span>
-                </div>
-          
-        )
+    // If no token is present, redirect to login immediately
+    if (!token) {
+      navigate('/login');
+      return;
     }
 
-   const showSuccess=()=>{
-    return(
-        <div className='bg-green-100 text-green-800 p-4 rounded-lg' style={{display:success?
-            "":'none' }} role='alert'>
-                <strong className='font-bold text-sm mr-2'>Success!</strong>
-                <span className='block text-sm sm:inline max-sm:mt-2'>Your email has been verified successfully.kindly go to login page </span>
-            </div>
-    )
-   }
-    
+    fetch(`/api/confirmation/${token}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          console.error("Verification failed:", data.error);
+        }
+        
+        // Whether success or failure, navigate to login immediately
+        navigate('/login');
+      })
+      .catch((err) => {
+        console.error("Error verifying email:", err);
+        navigate('/login'); // Navigate to login even in case of errors
+      });
 
-   return (
-    <>
-    {showError()}
-    {showSuccess()}
+  }, [param.token, navigate]);
 
-   </>
-  )
-}
+  // Optional: Show loading message before redirection
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <p className="text-lg text-gray-700">Verifying email... Redirecting to login...</p>
+    </div>
+  );
+};
 
-export default EmailVerify
+export default EmailVerify;

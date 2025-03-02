@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../../auth';
-import { Clock, MapPin, Phone, Mail, User, Monitor, Calendar, ArrowRight, CheckCircle, Shield, CreditCard } from 'lucide-react';
+import { Clock, MapPin, Phone, Mail, User, Monitor, Calendar, ArrowRight, CheckCircle, Shield, CreditCard,XCircle } from 'lucide-react';
 
 const ConfirmBooking = () => {
   const navigate = useNavigate();
@@ -17,6 +17,13 @@ const ConfirmBooking = () => {
     sessionStorage.setItem('orderInfo', JSON.stringify({ totalPrice, bookingInfo }));
     navigate('/payment');
   };
+
+    // Cancel Booking and Navigate to Home
+    const cancelBooking = () => {
+      localStorage.removeItem('productDetails');  // Remove booking details
+      localStorage.removeItem('bookingInfo');
+      navigate('/');  // Navigate to homepage
+    };
 
   const InfoItem = ({ icon: Icon, label, value }) => (
     <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
@@ -108,7 +115,6 @@ const ConfirmBooking = () => {
                 <InfoItem icon={User} label="Full Name" value={user.name} />
                 <InfoItem icon={Mail} label="Email Address" value={user.email} />
                 <InfoItem icon={Phone} label="Phone Number" value={bookingInfo.phone} />
-                <InfoItem icon={MapPin} label="Address" value={bookingInfo.shippingaddress1} />
                 <InfoItem icon={MapPin} label="City" value={bookingInfo.city} />
                 <InfoItem icon={MapPin} label="Country" value={bookingInfo.country} />
                 <InfoItem icon={Clock} label="Preferred Shift" value={bookingInfo.shift} />
@@ -144,25 +150,34 @@ const ConfirmBooking = () => {
                 </div>
               </div>
 
-              <button
-                onClick={proceedToPayment}
-                className="w-full bg-yellow-600 hover:bg-yellow-700 text-white text-lg font-medium py-4 rounded-lg mt-6 
-                  transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg flex items-center justify-center gap-2"
-              >
-                <CreditCard className="w-5 h-5" />
-                Proceed to Payment
-              </button>
+                              {/* Buttons for Payment and Cancellation */}
+  <div className="mt-6 flex flex-col space-y-4">
+  <button
+    onClick={proceedToPayment}
+    className="w-full bg-yellow-600 hover:bg-yellow-700 text-white text-lg font-medium py-4 rounded-lg transition flex items-center justify-center gap-2"
+  >
+    <CreditCard className="w-5 h-5" />
+    Proceed to Payment
+  </button>
+  <button
+    onClick={cancelBooking}
+    className="w-full bg-pink-800 hover:bg-white-400 text-white text-lg font-medium py-4 rounded-lg transition flex items-center justify-center gap-2"
+  >
+    <XCircle className="w-5 h-5" />
+    Cancel Booking
+  </button>
+</div>
 
-              <div className="mt-6 space-y-4">
-                <div className="flex items-center gap-2 text-gray-600">
-                  <CheckCircle className="w-4 h-4 text-green-500" />
-                  <span className="text-sm">Secure payment gateway</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-600">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span className="text-sm">100% refund policy</span>
-                </div>
-              </div>
+<div className="mt-6 space-y-4">
+  <div className="flex items-center gap-2 text-gray-600">
+    <CheckCircle className="w-4 h-4 text-green-500" />
+    <span className="text-sm">Secure payment gateway</span>
+  </div>
+  <div className="flex items-center gap-2 text-gray-600">
+    <Shield className="w-4 h-4 text-green-500" />
+    <span className="text-sm">100% refund policy</span>
+  </div>
+</div>
             </div>
           </div>
         </div>

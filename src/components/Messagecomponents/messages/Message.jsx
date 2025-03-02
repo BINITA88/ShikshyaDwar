@@ -36,49 +36,78 @@
 
 // export default Message;
 
+// import { extractTime } from "../../../utils/extractTime";
+// import useConversation from "../../../zustand/useConversation";
+
+// const Message = ({ message }) => {
+//   // Handle case where message or user might be undefined
+//   const jwt = localStorage.getItem("jwt");
+//   const { user } = jwt ? JSON.parse(jwt) : { user: null };
+//   const { selectedConversation } = useConversation();
+
+//   if (!message) {
+//     return null; // If no message is passed, render nothing
+//   }
+
+//   const fromMe = message.senderId === user?._id; // Use optional chaining
+//   const formattedTime = message.createdAt
+//     ? extractTime(message.createdAt)
+//     : "Unknown Time"; // Handle missing createdAt
+//   const chatClassName = fromMe ? "chat-end" : "chat-start";
+//   const profilePic = fromMe
+//     ? user?.profilePic || "/default-profile.png" // Fallback to default profile picture
+//     : selectedConversation?.profilePic || "/default-profile.png";
+//   const bubbleBgColor = fromMe ? "bg-blue-500" : "";
+//   const shakeClass = message.shouldShake ? "shake" : "";
+
+//   return (
+//     <div className={`chat ${chatClassName}`}>
+//       <div className="chat-image avatar">
+//         <div className="w-10 rounded-full">
+//           <img
+//             alt="Chat profile"
+//             src={profilePic}
+//             onError={(e) => (e.target.src = "/default-profile.png")} // Fallback if image fails to load
+//           />
+//         </div>
+//       </div>
+//       <div
+//         className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}
+//       >
+//         {message.message || "No message provided"} {/* Fallback for empty message */}
+//       </div>
+//       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
+//      \
+//         {formattedTime}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Message;
+// ...............................new change.............................
 import { extractTime } from "../../../utils/extractTime";
 import useConversation from "../../../zustand/useConversation";
 
 const Message = ({ message }) => {
-  // Handle case where message or user might be undefined
   const jwt = localStorage.getItem("jwt");
   const { user } = jwt ? JSON.parse(jwt) : { user: null };
   const { selectedConversation } = useConversation();
 
-  if (!message) {
-    return null; // If no message is passed, render nothing
-  }
+  if (!message) return null;
 
-  const fromMe = message.senderId === user?._id; // Use optional chaining
-  const formattedTime = message.createdAt
-    ? extractTime(message.createdAt)
-    : "Unknown Time"; // Handle missing createdAt
-  const chatClassName = fromMe ? "chat-end" : "chat-start";
-  const profilePic = fromMe
-    ? user?.profilePic || "/default-profile.png" // Fallback to default profile picture
-    : selectedConversation?.profilePic || "/default-profile.png";
-  const bubbleBgColor = fromMe ? "bg-blue-500" : "";
-  const shakeClass = message.shouldShake ? "shake" : "";
+  // Correcting the alignment logic
+  const fromMe = message.senderId === user?._id; // Message sent by logged-in user
 
   return (
-    <div className={`chat ${chatClassName}`}>
-      <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <img
-            alt="Chat profile"
-            src={profilePic}
-            onError={(e) => (e.target.src = "/default-profile.png")} // Fallback if image fails to load
-          />
-        </div>
-      </div>
+    <div className={`flex w-full ${fromMe ? "justify-end" : "justify-start"} my-2`}>
       <div
-        className={`chat-bubble text-white ${bubbleBgColor} ${shakeClass} pb-2`}
+        className={`max-w-[70%] px-4 py-2 rounded-lg text-left ${
+          fromMe ? "bg-blue-500 text-white" : "bg-gray-700 text-white"
+        }`}
       >
-        {message.message || "No message provided"} {/* Fallback for empty message */}
-      </div>
-      <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-     \
-        {formattedTime}
+        {message.message}
+        <div className="text-xs opacity-50 mt-1 text-right">{extractTime(message.createdAt)}</div>
       </div>
     </div>
   );

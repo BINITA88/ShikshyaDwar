@@ -33,15 +33,13 @@ const HomePages = () => {
     <>
       <Carousel />
    
-        <div>
-
-        </div>
+        
    
 {/* Display Cards dynamically */}
 <section className="py-14 px-10 bg-gradient-to-r from-white to-white">
   <div className="w-full">
     {/* Main Heading for Shikshyadwar */}
-    <h2 className="text-3xl mt-7 mb-11 ml-10 font-bold text-gray-800 mb-4 text-start leading-tight">
+    <h2 className="text-3xl mb-11 ml-10 font-bold text-gray-800 mb-4 text-start leading-tight">
     Explore Our Available Courses
     </h2>
     {/* Course Cards */}
@@ -73,7 +71,7 @@ const HomePages = () => {
 
 <Carousel1/>
 
-      <Chatbox />
+
       <Library />
     </>
   );

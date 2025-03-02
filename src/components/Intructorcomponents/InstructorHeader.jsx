@@ -363,6 +363,7 @@ import { Link, Outlet, useNavigate, Navigate, useLocation } from "react-router-d
 import { TbCategoryFilled } from "react-icons/tb";
 import { FaFacebookMessenger } from "react-icons/fa6";
 import { isAuthenticated, signout } from "../../auth";
+import { FaBookReader, FaUserGraduate, FaSignOutAlt } from "react-icons/fa";
 
 const InstructorHeader = () => {
   const [dropdowns, setDropdowns] = useState({
@@ -406,7 +407,7 @@ const InstructorHeader = () => {
       case '/instructor/seatlist':
         return 'Mock Test Seat List';
       case '/instructor/students':
-        return 'Students';
+        return 'Student';
       default:
         return 'Dashboard';
     }
@@ -487,49 +488,7 @@ const InstructorHeader = () => {
                 </Link>
               </li>
 
-              {/* Messages Dropdown */}
-              <li>
-                <button
-                  onClick={() => toggleDropdown("messages")}
-                  className={`flex items-center justify-between w-full p-3 rounded-lg transition-all duration-200
-                    ${dropdowns.messages ? 'bg-pink-700 text-white' : 'text-pink-100 hover:bg-pink-700/50'}`}
-                >
-                  <div className="flex items-center">
-                    <FaFacebookMessenger />
-                    <span className="ms-3">Messages</span>
-                  </div>
-                  <svg
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      dropdowns.messages ? 'rotate-180' : ''
-                    }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className={`mt-2 space-y-1 ${dropdowns.messages ? 'block' : 'hidden'}`}>
-                  <Link
-                    to="/instructor/addmessages"
-                    className={`flex items-center pl-11 p-3 rounded-lg transition-all duration-200
-                      ${isActive('/instructor/addmessages') 
-                        ? 'bg-pink-700 text-white' 
-                        : 'text-pink-100 hover:bg-pink-700/50'}`}
-                  >
-                    Add Message
-                  </Link>
-                  <Link
-                    to="/instructor/messageslist"
-                    className={`flex items-center pl-11 p-3 rounded-lg transition-all duration-200
-                      ${isActive('/instructor/messageslist') 
-                        ? 'bg-pink-700 text-white' 
-                        : 'text-pink-100 hover:bg-pink-700/50'}`}
-                  >
-                    Message List
-                  </Link>
-                </div>
-              </li>
+             
 
               {/* Exam Seat Dropdown */}
               <li>
@@ -576,37 +535,29 @@ const InstructorHeader = () => {
               </li>
 
               
-              {/* Students */}
-              <li>
-                <Link
-                  to="/instructor/students"
-                  className={`flex items-center p-3 rounded-lg transition-all duration-200 group
-                    ${isActive('/instructor/students') 
-                      ? 'bg-pink-700 text-white' 
-                      : 'text-pink-100 hover:bg-pink-700/50'}`}
+                {/* Students */}
+                            <li>
+                              <Link to="/instructor/student" className={`flex items-center p-3 rounded-lg transition-all duration-200 group ${isActive("/admin/students") ? "bg-pink-700 text-white" : "text-pink-100 hover:bg-pink-700/50"}`}>
+                                <FaUserGraduate className="w-5 h-5" />
+                                <span className="ms-3">Students</span>
+                              </Link>
+                            </li>
+                          </ul>
+                        </nav>
+              {/* Sign Out Button */}
+              <div className="p-4 border-t border-pink-700/50">
+                <button
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to log out?")) {
+                      signout(() => navigate("/login"));
+                    }
+                  }}
+                  className="flex items-center justify-start w-full p-3 rounded-lg text-pink-100 hover:bg-pink-700/50 transition-all duration-200"
                 >
-                  <svg
-                    className="w-5 h-5 transition-colors duration-200"
-                    fill="currentColor"
-                    viewBox="0 0 22 21"
-                  >
-                    <path d="M11 14a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM9 19v-1a2 2 0 1 1 4 0v1h3a1 1 0 0 1 1 1v1H5v-1a1 1 0 0 1 1-1h3Zm5-2a2 2 0 1 0-4 0h4Z" />
-                  </svg>
-                  <span className="ms-3">Students</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* Sign out */}
-          <div className="p-4 border-t border-pink-700/50">
-            <button
-              onClick={() => signout(() => navigate("/login"))}
-              className="text-pink-100 hover:bg-pink-700/50 w-full p-3 rounded-lg"
-            >
-              Sign out
-            </button>
-          </div>
+                  <FaSignOutAlt className="w-5 h-5" />
+                  <span className="ms-3">Sign Out</span>
+                </button>
+              </div>
         </div>
       </aside>
 

@@ -3,7 +3,7 @@ import SearchInput from "./SearchInput";
 
 const ChatSidebar = () => {
 	return (
-		<div className='border-r border-slate-800 p-4 flex flex-col'>
+		<div className='border-r w-96 border-slate-800 p-4 flex flex-col'>
 			<SearchInput />
 			<div className='divider px-1'></div>
 			<Conversations />

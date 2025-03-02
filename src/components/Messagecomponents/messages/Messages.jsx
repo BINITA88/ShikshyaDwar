@@ -70,3 +70,35 @@ console.log(messages)
   );
 };
 export default Messages;
+
+
+// ....................................new changes ..........................
+
+// import { extractTime } from "../../../utils/extractTime";
+// import useConversation from "../../../zustand/useConversation";
+
+// const Message = ({ message }) => {
+//   const jwt = localStorage.getItem("jwt");
+//   const { user } = jwt ? JSON.parse(jwt) : { user: null };
+//   const { selectedConversation } = useConversation();
+
+//   if (!message) return null;
+
+//   // **Ensure Messages Are on the Correct Side**
+//   const fromMe = message.senderId === user?._id;
+
+//   return (
+//     <div className={`flex w-full ${fromMe ? "justify-end" : "justify-start"} my-2`}>
+//       <div
+//         className={`max-w-[70%] px-4 py-2 rounded-lg text-left ${
+//           fromMe ? "bg-blue-500 text-white" : "bg-gray-700 text-white"
+//         }`}
+//       >
+//         {message.message}
+//         <div className="text-xs opacity-50 mt-1 text-right">{extractTime(message.createdAt)}</div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Message;

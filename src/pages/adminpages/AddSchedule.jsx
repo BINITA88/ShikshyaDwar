@@ -1,148 +1,96 @@
 import React, { useState, useEffect } from "react";
 import { AlertCircle, CheckCircle, Plus, X } from "lucide-react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddSchedule = () => {
   const [schedule, setSchedule] = useState({
     day: "",
     time: "",
     subject: "",
-    type: "active", // Default type
+    type: "active",
   });
   const [scheduleList, setScheduleList] = useState([]);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { day, time, subject, type } = schedule;
 
   // Fetch schedules on mount
   useEffect(() => {
     const getSchedules = async () => {
       try {
         const response = await axios.get("/api/schedules/getschedule", {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
         setScheduleList(response.data.schedules || []);
       } catch (error) {
-        setError("Error fetching schedule list.");
+        // toast.error("Error fetching schedule list.");
       }
     };
-
     getSchedules();
   }, []);
 
   const onHandleChange = (name) => (e) => {
     setSchedule({ ...schedule, [name]: e.target.value });
-    setError(""); // Clear error on change
   };
 
   const addScheduleToList = () => {
+    const { day, time, subject, type } = schedule;
     if (day && time && subject) {
       setScheduleList([...scheduleList, { day, time, subject, type }]);
       setSchedule({ day: "", time: "", subject: "", type: "active" });
-      setError("");
+      toast.success("Schedule added!");
     } else {
-      setError("All fields are required.");
+      toast.error("All fields are required.");
     }
   };
 
   const removeSchedule = (index) => {
     setScheduleList(scheduleList.filter((_, i) => i !== index));
+    toast.info("Schedule removed.");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError("");
-    setSuccess(false);
-  
     if (scheduleList.length === 0) {
-      setError("Please add at least one schedule before submitting.");
+      toast.error("Please add at least one schedule before submitting.");
       return;
     }
-  
     setIsSubmitting(true);
+
     try {
       for (let schedule of scheduleList) {
-        const response = await axios.post(
-          "/api/schedules/addschedule",
-          schedule,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log("Schedule added:", response.data);
+        await axios.post("/api/schedules/addschedule", schedule, {
+          headers: { "Content-Type": "application/json" },
+        });
       }
-      setSuccess(true);
       setScheduleList([]);
+      toast.success("All schedules submitted successfully!");
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.error || "Something went wrong. Please try again.";
-      setError(errorMessage);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const ScheduleListItem = ({ item, index }) => (
-    <div className="flex items-center justify-between bg-gray-50 p-3 rounded-md border border-gray-200">
-      <span>
-        {item.day}: {item.time} - {item.subject} ({item.type})
-      </span>
-      <button
-        type="button"
-        onClick={() => removeSchedule(index)}
-        className="text-gray-400 hover:text-gray-600"
-      >
-        <X className="h-4 w-4" />
-      </button>
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Add New Schedule</h2>
-          <p className="mt-2 text-gray-600">Create a class schedule</p>
-        </div>
+    <div className="min-h-screen py-12 px-6">
+      <ToastContainer position="top-center" autoClose={3000} />
 
-        {error && (
-          <div className="mb-6 flex items-center gap-2 p-4 rounded-lg bg-red-50 border border-red-200">
-            <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
-            <p className="text-sm text-red-700">{error}</p>
-          </div>
-        )}
+      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-8 border">
+        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
+          Add New Schedule
+        </h2>
 
-        {success && (
-          <div className="mb-6 flex items-center gap-2 p-4 rounded-lg bg-green-50 border border-green-200">
-            <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-            <p className="text-sm text-green-700">Schedule added successfully!</p>
-          </div>
-        )}
-
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
-        >
-          <div className="border-b border-gray-200 bg-gray-50 px-6 py-4">
-            <h3 className="text-lg font-medium text-gray-900">
-              Schedule Information
-            </h3>
-          </div>
-
-          <div className="p-6 space-y-6">
-            {/* Day */}
-            <div className="space-y-1">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Day Selector */}
+            <div>
               <label className="block text-sm font-medium text-gray-700">Day</label>
               <select
-                value={day}
+                value={schedule.day}
                 onChange={onHandleChange("day")}
-                className="w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               >
                 <option value="">Select Day</option>
@@ -154,38 +102,41 @@ const AddSchedule = () => {
               </select>
             </div>
 
-            {/* Time */}
-            <div className="space-y-1">
+            {/* Time Selector */}
+            <div>
               <label className="block text-sm font-medium text-gray-700">Time</label>
               <input
                 type="time"
-                value={time}
+                value={schedule.time}
                 onChange={onHandleChange("time")}
-                className="w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
+          </div>
 
-            {/* Subject */}
-            <div className="space-y-1">
+          {/* Subject & Type */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Subject Input */}
+            <div>
               <label className="block text-sm font-medium text-gray-700">Subject</label>
               <input
                 type="text"
-                value={subject}
+                value={schedule.subject}
                 onChange={onHandleChange("subject")}
-                placeholder="Subject Name"
-                className="w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                placeholder="Enter Subject Name"
+                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
             </div>
 
-            {/* Type */}
-            <div className="space-y-1">
+            {/* Type Selector */}
+            <div>
               <label className="block text-sm font-medium text-gray-700">Schedule Type</label>
               <select
-                value={type}
+                value={schedule.type}
                 onChange={onHandleChange("type")}
-                className="w-full px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500"
+                className="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
               >
                 <option value="active">Active</option>
                 <option value="paused">Paused</option>
@@ -194,28 +145,45 @@ const AddSchedule = () => {
             </div>
           </div>
 
-          <div className="p-6 bg-gray-50 space-y-4">
-            <div className="space-y-4">
-              {scheduleList.map((schedule, index) => (
-                <ScheduleListItem key={index} item={schedule} index={index} />
+          {/* Schedule List */}
+          {scheduleList.length > 0 && (
+            <div className="mt-6 space-y-4">
+              {scheduleList.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center bg-gray-100 p-3 rounded-lg shadow-md"
+                >
+                  <span className="text-gray-700">
+                    {item.day} - {item.time} - {item.subject} ({item.type})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeSchedule(index)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
               ))}
             </div>
+          )}
 
+          {/* Buttons */}
+          <div className="flex justify-center space-x-4">
             <button
               type="button"
               onClick={addScheduleToList}
-              className="w-full inline-flex justify-center items-center px-4 py-2 rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-all"
             >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Schedule
+              <Plus className="h-4 w-4 mr-2" /> Add Schedule
             </button>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full inline-flex justify-center items-center px-4 py-2 rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg shadow-md hover:bg-green-700 transition-all"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit All'}
+              {isSubmitting ? "Submitting..." : "Submit All"}
             </button>
           </div>
         </form>

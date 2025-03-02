@@ -52,9 +52,9 @@ const Carousel = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row justify-between h-auto bg-blue-100 p-8">
+    <div className="flex  flex-col lg:flex-row justify-between h-full bg-gradient-to-b from-blue-50 to-white p-8">
       {/* Left Section with Text */}
-      <div className="flex flex-col items-start w-full lg:w-1/2 pr-8 space-y-6 lg:ml-16 lg:mt-14">
+      <div className="flex  mt-20 flex-col items-start w-full lg:w-1/2 pr-8 space-y-6 lg:ml-16 lg:mt-14">
         <h2 className="text-4xl lg:text-5xl font-bold text-blue-900 transition-transform transform hover:scale-105">{text[0]}</h2>
         <h3 className="text-3xl lg:text-4xl font-semibold text-orange-500">{text[1]}</h3>
         <p className="text-lg font-medium text-gray-700 h-24 overflow-hidden transition-all ease-in-out duration-500">
@@ -63,7 +63,7 @@ const Carousel = () => {
 
         {/* Buttons */}
         <div className="flex space-x-4">
-          <Link to="/apply">
+          <Link to="/">
           <button className="bg-pink-800 text-white p-20 px-6 py-3 rounded-md hover:bg-orange-600 transition duration-300 transform hover:scale-105">
             Apply Now
           </button>
@@ -74,7 +74,7 @@ const Carousel = () => {
       </div>
 
       {/* Carousel Section */}
-      <div id="default-carousel" className="relative w-full lg:w-1/2 mt-6 lg:mt-0">
+      <div id="default-carousel" className="relative w-full lg:w-1/2 mt-20 lg:mt-0">
         <div className="relative mx-auto h-56 sm:h-72 md:h-96 lg:h-128 w-full lg:w-96 overflow-hidden rounded-lg border-8 border-white shadow-xl transform hover:scale-105 transition-transform duration-500">
           {images.map((img, index) => (
             <div

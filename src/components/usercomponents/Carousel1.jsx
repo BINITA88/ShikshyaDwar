@@ -430,98 +430,180 @@
 
 
 
-import React from 'react';
+// import React from 'react';
 
-const Carousel1 = () => {
+// const Carousel1 = () => {
+//   return (
+//     <div className="w-full max-w-6xl mx-auto p-4">
+//       {/* Video Section with correct background */}
+//       <div className="w-full aspect-video mb-8 bg-[#234B65] rounded-lg overflow-hidden">
+//         <div className="relative w-full h-full flex items-center justify-center">
+//           {/* Logo */}
+//           <div className="absolute flex items-center justify-center">
+//             <div className="relative w-28 h-28">
+//               <div className="absolute w-full h-full flex">
+//                 <div className="w-1/2 bg-[#FFA666]"></div>
+//                 <div className="w-1/2 bg-[#E17676]"></div>
+//               </div>
+//               <div className="absolute inset-2 bg-white rounded-full overflow-hidden">
+//                 <img 
+//                   src="/api/placeholder/100/100"
+//                   alt="Examiner"
+//                   className="w-full h-full object-cover"
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//           {/* Title */}
+//           <div className="absolute bottom-12 text-center text-white">
+//             <h1 className="text-3xl font-bold mb-1">IELTS Writing</h1>
+//             <p className="text-xl">Examiner Evaluation</p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Service Items Grid */}
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+//         {/* Real IELTS Test Experience */}
+//         <div className="p-6 bg-white rounded-lg border border-[#9f2c2c] hover:shadow-lg transition-shadow">
+//           <div className="flex flex-col items-center text-center">
+//             <div className="w-16 h-16 mb-4">
+//               <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
+//                 <rect x="4" y="4" width="16" height="16" rx="2"/>
+//                 <path d="M12 8v8m-4-4h8"/>
+//               </svg>
+//             </div>
+//             <h3 className="text-lg font-semibold text-[#234B65] mb-2">Real IELTS test experience</h3>
+//             <p className="text-gray-600">Take our real IELTS test and your Writing will be marked by our examiners with years of experience with IELTS tests.</p>
+//           </div>
+//         </div>
+
+//         {/* Detailed Feedbacks */}
+//         <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
+//           <div className="flex flex-col items-center text-center">
+//             <div className="w-16 h-16 mb-4">
+//               <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
+//                 <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
+//                 <rect x="8" y="3" width="8" height="4" rx="1"/>
+//                 <path d="M8 10h8M8 14h8M8 18h8"/>
+//               </svg>
+//             </div>
+//             <h3 className="text-lg font-semibold text-[#234B65] mb-2">Detailed feedbacks</h3>
+//             <p className="text-gray-600">Receive detailed feedback and accurate band score of your IELTS writing ability.</p>
+//           </div>
+//         </div>
+
+//         {/* Quick Response */}
+//         <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
+//           <div className="flex flex-col items-center text-center">
+//             <div className="w-16 h-16 mb-4">
+//               <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
+//                 <circle cx="12" cy="12" r="10"/>
+//                 <path d="M12 6v6l4 2"/>
+//               </svg>
+//             </div>
+//             <h3 className="text-lg font-semibold text-[#234B65] mb-2">Quick response</h3>
+//             <p className="text-gray-600">No time to waste! Obtain your IELTS writing recording assessment and evaluation from our examiners in just 48 hours.</p>
+//           </div>
+//         </div>
+
+//         {/* Boost Score */}
+//         <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
+//           <div className="flex flex-col items-center text-center">
+//             <div className="w-16 h-16 mb-4">
+//               <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
+//                 <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+//               </svg>
+//             </div>
+//             <h3 className="text-lg font-semibold text-[#234B65] mb-2">Boost score in short time</h3>
+//             <p className="text-gray-600">We help to increase your IELTS Writing band score by 0.5 - 1 in short time with suggestions for improvement.</p>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Carousel1;
+import React, { useState, useEffect } from 'react';
+
+const EnhancedCarousel = () => {
+  const [isAnimated, setIsAnimated] = useState(false);
+  
+  useEffect(() => {
+    setIsAnimated(true);
+  }, []);
+
   return (
-    <div className="w-full max-w-6xl mx-auto p-4">
-      {/* Video Section with correct background */}
-      <div className="w-full aspect-video mb-8 bg-[#234B65] rounded-lg overflow-hidden">
-        <div className="relative w-full h-full flex items-center justify-center">
-          {/* Logo */}
-          <div className="absolute flex items-center justify-center">
-            <div className="relative w-28 h-28">
-              <div className="absolute w-full h-full flex">
-                <div className="w-1/2 bg-[#FFA666]"></div>
-                <div className="w-1/2 bg-[#E17676]"></div>
+    <div className="w-full py-12">
+      {/* Hero Section */}
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div 
+          className={`w-full aspect-video mb-12 bg-gradient-to-r from-pink-900 to-pink-700 rounded-xl overflow-hidden shadow-2xl transform transition-all duration-700 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+        >
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Background Decorations */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-pink-400 blur-xl"></div>
+              <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-pink-300 blur-xl"></div>
+              <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-white blur-lg"></div>
+            </div>
+
+            {/* Title */}
+            <div className="absolute bottom-16 text-center text-white transform transition-all duration-700">
+              <h1 className="text-5xl font-bold mb-3 tracking-wide text-white drop-shadow-lg uppercase">Master IELTS Writing</h1>
+              <p className="text-xl font-light tracking-wider text-pink-300 italic">Expert Evaluation for Your Success</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Service Items Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {[
+            {
+              title: "Real Test Experience 🎯",
+              desc: "Feel the real exam pressure! Take a simulated IELTS Writing test graded by certified IELTS examiners.",
+            },
+            {
+              title: "Expert Feedback 📋",
+              desc: "Get an in-depth analysis of your writing with detailed feedback and actionable improvement tips.",
+            },
+            {
+              title: "Lightning-Fast Results ⚡",
+              desc: "No time to waste! Receive your detailed evaluation and band score within **48 hours**.",
+            },
+            {
+              title: "Boost Your Score 🚀",
+              desc: "Our expert insights and strategies help you increase your IELTS Writing score by **0.5 - 1 band** in no time!",
+            }
+          ].map((item, index) => (
+            <div 
+              key={index}
+              className={`p-6 bg-white rounded-xl border-2 border-pink-700 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+              style={{ transitionDelay: `${200 + index * 100}ms` }}
+            >
+              <div className="flex flex-col items-center text-center h-full">
+                <h3 className="text-2xl font-bold text-pink-700 mb-3">{item.title}</h3>
+                <p className="text-gray-600 flex-grow">{item.desc}</p>
+                <button className="mt-5 px-6 py-3 w-full bg-pink-700 text-white text-lg font-medium rounded-full hover:bg-pink-800 transition-colors duration-300 shadow-md">
+                  Learn More
+                </button>
               </div>
-              <div className="absolute inset-2 bg-white rounded-full overflow-hidden">
-                <img 
-                  src="/api/placeholder/100/100"
-                  alt="Examiner"
-                  className="w-full h-full object-cover"
-                />
-              </div>
             </div>
-          </div>
-          {/* Title */}
-          <div className="absolute bottom-12 text-center text-white">
-            <h1 className="text-3xl font-bold mb-1">IELTS Writing</h1>
-            <p className="text-xl">Examiner Evaluation</p>
-          </div>
+          ))}
         </div>
-      </div>
-
-      {/* Service Items Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {/* Real IELTS Test Experience */}
-        <div className="p-6 bg-white rounded-lg border border-[#9f2c2c] hover:shadow-lg transition-shadow">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 mb-4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
-                <rect x="4" y="4" width="16" height="16" rx="2"/>
-                <path d="M12 8v8m-4-4h8"/>
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-[#234B65] mb-2">Real IELTS test experience</h3>
-            <p className="text-gray-600">Take our real IELTS test and your Writing will be marked by our examiners with years of experience with IELTS tests.</p>
-          </div>
-        </div>
-
-        {/* Detailed Feedbacks */}
-        <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 mb-4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
-                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/>
-                <rect x="8" y="3" width="8" height="4" rx="1"/>
-                <path d="M8 10h8M8 14h8M8 18h8"/>
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-[#234B65] mb-2">Detailed feedbacks</h3>
-            <p className="text-gray-600">Receive detailed feedback and accurate band score of your IELTS writing ability.</p>
-          </div>
-        </div>
-
-        {/* Quick Response */}
-        <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 mb-4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2"/>
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-[#234B65] mb-2">Quick response</h3>
-            <p className="text-gray-600">No time to waste! Obtain your IELTS writing recording assessment and evaluation from our examiners in just 48 hours.</p>
-          </div>
-        </div>
-
-        {/* Boost Score */}
-        <div className="p-6 bg-white rounded-lg border border-[#FFA666] hover:shadow-lg transition-shadow">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-16 h-16 mb-4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#FFA666" strokeWidth="2">
-                <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-[#234B65] mb-2">Boost score in short time</h3>
-            <p className="text-gray-600">We help to increase your IELTS Writing band score by 0.5 - 1 in short time with suggestions for improvement.</p>
-          </div>
+        
+        {/* Call to Action */}
+        <div className="mt-16 text-center">
+          <h2 className="text-3xl font-bold text-pink-700 mb-6">Ready to Achieve a Higher IELTS Score?</h2>
+          <p className="text-lg text-gray-700 mb-4">Start your expert evaluation today and take the first step towards IELTS success!</p>
+          <button className="px-10 py-4 bg-pink-700 text-white rounded-full font-semibold hover:bg-pink-800 transition-colors duration-300 shadow-lg text-lg">
+            Start Assessment Now
+          </button>
         </div>
       </div>
     </div>
   );
 };
 
-export default Carousel1;
+export default EnhancedCarousel;

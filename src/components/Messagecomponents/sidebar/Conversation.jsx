@@ -143,36 +143,233 @@
 
 // // export default Conversation;
 
+// import { useSocketContext } from "../../../context/SocketContext";
+// import useConversation from "../../../zustand/useConversation";
+
+// const Conversation = ({ conversation, lastIdx, emoji }) => {
+//   const { selectedConversation, setSelectedConversation } = useConversation();
+//   const { onlineUsers } = useSocketContext();
+
+//   // Check if this conversation is selected
+//   const isSelected = selectedConversation?._id === conversation._id;
+
+//   // Check if the user in the conversation is online
+//   const isOnline = onlineUsers.includes(conversation._id);
+
+//   return (
+//     <>
+//       <div
+//         className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
+//         ${isSelected ? "bg-sky-500" : ""}
+//         `}
+//         onClick={() => setSelectedConversation(conversation)}
+//       >
+//         <div className={`avatar ${isOnline ? "online" : ""}`}>
+//           <div className="w-12 rounded-full">
+//             <img src={conversation.profilePic} alt="user avatar" />
+//           </div>
+//         </div>
+
+//         <div className="flex flex-col flex-1">
+//           <div className="flex gap-3 justify-between">
+//             <p className="font-bold ml-10 text-gray-600">{conversation.name}</p>
+//             <span className="text-xl">{emoji}</span>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Divider between conversations */}
+//       {!lastIdx && <div className="divider my-0 py-0 h-1" />}
+//     </>
+//   );
+// };
+
+// export default Conversation;
+// import { useSocketContext } from "../../../context/SocketContext";
+// import useConversation from "../../../zustand/useConversation";
+// import { useRef } from "react";
+
+// // List of unique cartoon avatar URLs
+// const cartoonAvatars = [
+//   "https://i.pravatar.cc/150?img=1",
+//   "https://i.pravatar.cc/150?img=2",
+//   "https://i.pravatar.cc/150?img=3",
+//   "https://i.pravatar.cc/150?img=4",
+//   "https://i.pravatar.cc/150?img=5",
+//   "https://i.pravatar.cc/150?img=6",
+//   "https://i.pravatar.cc/150?img=7",
+//   "https://i.pravatar.cc/150?img=8",
+//   "https://i.pravatar.cc/150?img=9",
+//   "https://i.pravatar.cc/150?img=10",
+// ];
+
+// const Conversation = ({ conversation, index, lastIdx, emoji }) => {
+//   const { selectedConversation, setSelectedConversation } = useConversation();
+
+//   // Store assigned avatars to prevent repetition
+//   const assignedAvatars = useRef(new Map());
+
+//   // Function to assign a unique avatar
+//   const getUniqueAvatar = (id) => {
+//     if (assignedAvatars.current.has(id)) {
+//       return assignedAvatars.current.get(id);
+//     }
+
+//     const availableAvatars = cartoonAvatars.filter(
+//       (avatar) => !Array.from(assignedAvatars.current.values()).includes(avatar)
+//     );
+
+//     const selectedAvatar =
+//       availableAvatars.length > 0
+//         ? availableAvatars[Math.floor(Math.random() * availableAvatars.length)]
+//         : cartoonAvatars[Math.floor(Math.random() * cartoonAvatars.length)];
+
+//     assignedAvatars.current.set(id, selectedAvatar);
+//     return selectedAvatar;
+//   };
+
+//   const avatar = getUniqueAvatar(conversation._id);
+
+//   // 🟢 Random Online/Offline Status
+//   const isOnline = Math.random() > 0.5; // 50% chance for online/offline
+
+//   return (
+//     <>
+//       <div
+//         className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
+//         ${selectedConversation?._id === conversation._id ? "bg-sky-500" : ""}
+//         `}
+//         onClick={() => setSelectedConversation(conversation)}
+//       >
+//         <div className="relative">
+//           {/* Avatar Image */}
+//           <div className="w-12 h-12 rounded-full overflow-hidden">
+//             <img
+//               src={avatar}
+//               alt="Cartoon Avatar"
+//               className="w-full h-full object-cover"
+//             />
+//           </div>
+
+//           {/* Online/Offline Indicator */}
+//           <div
+//             className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+//               isOnline ? "bg-green-500" : "bg-gray-400"
+//             }`}
+//           ></div>
+//         </div>
+
+//         <div className="flex flex-col flex-1">
+//           <div className="flex gap-3 justify-between">
+//             <p className="font-bold ml-4 text-gray-600">{conversation.name}</p>
+//             <span className="text-xl">{emoji}</span>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* Divider between conversations */}
+//       {!lastIdx && <div className="divider my-0 py-0 h-1" />}
+//     </>
+//   );
+// };
+
+// export default Conversation;
+
 import { useSocketContext } from "../../../context/SocketContext";
 import useConversation from "../../../zustand/useConversation";
+import { useRef, useState, useEffect } from "react";
 
-const Conversation = ({ conversation, lastIdx, emoji }) => {
+// Importing images from assets manually
+import Australia from "../../../assets/img/Australia.png";
+import Canada from "../../../assets/img/canada.png";
+import Discuss from "../../../assets/img/discuss.jpg";
+import Forget from "../../../assets/img/forget.png";
+import I1 from "../../../assets/img/i.png";
+import I2 from "../../../assets/img/i2.png";
+import I3 from "../../../assets/img/i3.png";
+import I4 from "../../../assets/img/i4.png";
+import IELTS from "../../../assets/img/ielts.png";
+import Library from "../../../assets/img/library.png";
+import Login from "../../../assets/img/login.png";
+import P1 from "../../../assets/img/p1.png";
+import Profile from "../../../assets/img/profile.png";
+import PTE from "../../../assets/img/pte.png";
+import Register from "../../../assets/img/register.jpg";
+
+// List of local avatar images (Ensure unique usage)
+const localAvatars = [Australia, Canada, Discuss, Forget, I1, I2, I3, I4, IELTS, Library, Login, P1, Profile, PTE, Register];
+
+const Conversation = ({ conversation, index, lastIdx, emoji }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
-  const { onlineUsers } = useSocketContext();
+  const assignedAvatars = useRef(new Map()); // Store assigned avatars
+  const [availableAvatars, setAvailableAvatars] = useState([...localAvatars]); // Track available avatars
 
-  // Check if this conversation is selected
-  const isSelected = selectedConversation?._id === conversation._id;
+  useEffect(() => {
+    // Reset avatar tracking when component mounts
+    assignedAvatars.current.clear();
+    setAvailableAvatars([...localAvatars]);
+  }, []);
 
-  // Check if the user in the conversation is online
-  const isOnline = onlineUsers.includes(conversation._id);
+  // Function to assign a unique avatar without repetition
+  const getUniqueAvatar = (id) => {
+    if (assignedAvatars.current.has(id)) {
+      return assignedAvatars.current.get(id);
+    }
+
+    // If no avatars left, reset the list and start over
+    if (availableAvatars.length === 0) {
+      console.warn("All avatars assigned! Restarting...");
+      setAvailableAvatars([...localAvatars]); // Reset available avatars
+    }
+
+    // Pick a random available avatar
+    const randomIndex = Math.floor(Math.random() * availableAvatars.length);
+    const selectedAvatar = availableAvatars[randomIndex];
+
+    // Remove selected avatar from available list
+    setAvailableAvatars((prev) => prev.filter((_, i) => i !== randomIndex));
+
+    // Store assigned avatar
+    assignedAvatars.current.set(id, selectedAvatar);
+    return selectedAvatar;
+  };
+
+  const avatar = getUniqueAvatar(conversation._id);
+
+  // 🟢 Random Online/Offline Status
+  const isOnline = Math.random() > 0.5; // 50% chance for online/offline
 
   return (
     <>
       <div
         className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
-        ${isSelected ? "bg-sky-500" : ""}
+        ${selectedConversation?._id === conversation._id ? "bg-sky-500" : ""}
         `}
         onClick={() => setSelectedConversation(conversation)}
       >
-        <div className={`avatar ${isOnline ? "online" : ""}`}>
-          <div className="w-12 rounded-full">
-            <img src={conversation.profilePic} alt="user avatar" />
-          </div>
+        <div className="relative">
+          {/* Avatar Image (Only Show if Assigned) */}
+          {avatar ? (
+            <div className="w-12 h-12 rounded-full overflow-hidden">
+              <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" />
+            </div>
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+              ❌
+            </div> // Placeholder if no avatar is available
+          )}
+
+          {/* Online/Offline Indicator */}
+          <div
+            className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+              isOnline ? "bg-green-500" : "bg-gray-400"
+            }`}
+          ></div>
         </div>
 
         <div className="flex flex-col flex-1">
           <div className="flex gap-3 justify-between">
-            <p className="font-bold text-gray-600">{conversation.name}</p>
+            <p className="font-bold ml-4 text-gray-600">{conversation.name}</p>
             <span className="text-xl">{emoji}</span>
           </div>
         </div>
@@ -185,4 +382,6 @@ const Conversation = ({ conversation, lastIdx, emoji }) => {
 };
 
 export default Conversation;
+
+
 

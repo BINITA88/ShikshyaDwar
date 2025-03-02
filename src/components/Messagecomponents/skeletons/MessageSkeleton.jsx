@@ -1,4 +1,4 @@
-const React = require("react");
+import React from "react";
 
 const MessageSkeleton = () => {
     return (
@@ -20,4 +20,4 @@ const MessageSkeleton = () => {
     );
 };
 
-module.exports = MessageSkeleton;
+export default MessageSkeleton;

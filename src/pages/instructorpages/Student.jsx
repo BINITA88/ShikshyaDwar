@@ -1,230 +1,280 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import { isAuthenticated } from '../../auth';
-import { Search, Users, Mail, RefreshCw, Filter, Download, Clock, School, Heart } from 'lucide-react';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import { isAuthenticated } from "../../auth";
+import { AlertCircle, Trash2, User } from "lucide-react";
+import "react-toastify/dist/ReactToastify.css";
 
-const StudentDetails = () => {
+const StudentDetail = () => {
+  const [allSeats, setAllSeats] = useState([]);
+  const [error, setError] = useState("");
   const { token } = isAuthenticated();
-  const [user, setUser] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortField, setSortField] = useState('name');
-  const [sortOrder, setSortOrder] = useState('asc');
+
+  // Dummy usernames for seats
+  const dummyUsernames = ["Ruby", "Karan", "Saru", "Manisha", "Binod", "Kalpana","Binita","Roshan","deepak","samjhana","Raj"];
+
+  // Fetch all seats
+  const fetchSeats = async () => {
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get("/api/seat", config);
+      setAllSeats(response.data);
+      setError("");
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to fetch seats.");
+    }
+  };
 
   useEffect(() => {
-    fetchUsers();
-  }, [token]);
+    fetchSeats();
+  }, []);
 
-  const fetchUsers = async () => {
-    setLoading(true);
+  // Delete a seat
+  const deleteSeat = async (seatNumber) => {
     try {
-      // Fetch booking data from bookinglist endpoint
-      const bookingRes = await axios.get('/api/bookinglist', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      await axios.delete(`/api/seat/${seatNumber}`, config);
 
-      // Set the booking data to user state
-      setUser(bookingRes.data);
+      setAllSeats((prevSeats) => prevSeats.filter((seat) => seat.seatNumber !== seatNumber));
+      toast.success(`Seat ${seatNumber} deleted successfully!`);
     } catch (err) {
-      console.error('Error fetching data:', err);
-      toast.error('Failed to load students');
-    } finally {
-      setLoading(false);
+      setError(err.response?.data?.error || "Failed to delete seat.");
+      toast.error("Failed to delete seat.");
     }
-  };
-
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortField(field);
-      setSortOrder('asc');
-    }
-  };
-
-  const filteredAndSortedUsers = user
-    .filter(student => 
-      student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.shift?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.classMode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.status?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.city?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aValue = a[sortField] || '';
-      const bValue = b[sortField] || '';
-      return sortOrder === 'asc' 
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    });
-
-  const exportToCSV = () => {
-    const headers = ['Name', 'Email', 'Shift', 'Class Mode', 'Phone', 'Status', 'City', 'Interested In Counseling'];
-    const csvData = filteredAndSortedUsers.map(student => 
-      [
-        student.name || 'N/A',
-        student.email || 'N/A',
-        student.shift || 'N/A',
-        student.classMode || 'N/A',
-        student.phone || 'N/A',
-        student.status || 'N/A',
-        student.city || 'N/A',
-        student.interestedInCounseling ? 'Yes' : 'No'
-      ].join(',')
-    );
-    const csv = [headers.join(','), ...csvData].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'students.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6">
-      <ToastContainer theme="colored" position="top-center" />
-      
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-2">
-          <Users className="h-6 w-6 text-indigo-600" />
-          <h1 className="text-2xl font-bold text-gray-800">Student Details</h1>
-          <span className="ml-2 px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md text-sm">
-            {filteredAndSortedUsers.length} Students
-          </span>
-        </div>
+    <div className="min-h-screen py-12 flex justify-center">
+      <ToastContainer position="top-center" autoClose={3000} />
 
-        <div className="flex gap-3">
-          <button
-            onClick={fetchUsers}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </button>
-          <button
-            onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <Download className="h-4 w-4" />
-            Export CSV
-          </button>
-        </div>
-      </div>
+      <div className="w-full max-w-5xl bg-white shadow-lg rounded-xl p-8 border">
+        <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
+         Booked Exam Seat Student Details
+        </h2>
 
-      <div className="mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search students..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-          />
-        </div>
-      </div>
+        {/* Error Message */}
+        {error && (
+          <div className="mt-4 flex items-center gap-2 p-4 rounded-lg bg-red-50 border border-red-200">
+            <AlertCircle className="h-5 w-5 text-red-600" />
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
 
-      {loading ? (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-          <span className="ml-3 text-lg text-gray-700">Loading students...</span>
-        </div>
-      ) : filteredAndSortedUsers.length > 0 ? (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-            <thead>
-              <tr className="bg-gray-50 border-b">
-                <th 
-                  className="p-4 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort('name')}
-                >
-                  <div className="flex items-center gap-2">
-                    Student Info
-                    {sortField === 'name' && (
-                      <Filter className={`h-4 w-4 ${sortOrder === 'desc' ? 'transform rotate-180' : ''}`} />
-                    )}
-                  </div>
-                </th>
-                <th 
-                  className="p-4 text-left font-medium text-gray-700 cursor-pointer hover:bg-gray-100"
-                  onClick={() => handleSort('shift')}
-                >
-                  <div className="flex items-center gap-2">
-                    Shift & Mode
-                    {sortField === 'shift' && (
-                      <Filter className={`h-4 w-4 ${sortOrder === 'desc' ? 'transform rotate-180' : ''}`} />
-                    )}
-                  </div>
-                </th>
-                <th className="p-4 text-left font-medium text-gray-700">Counseling</th>
-                <th className="p-4 text-left font-medium text-gray-700">Phone</th>
-                {/* <th className="p-4 text-left font-medium text-gray-700">Status</th> */}
-                <th className="p-4 text-left font-medium text-gray-700">Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAndSortedUsers.map((data) => (
-                <tr key={data._id} className="border-b hover:bg-gray-50 transition-colors">
-                  <td className="p-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Users className="h-5 w-5 text-gray-400" />
-                        <span className="font-medium">{data?.user?.name || 'N/A'}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <Mail className="h-4 w-4" />
-                        <span>{data?.user?.email || 'N/A'}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-gray-400" />
-                        <span>{data.shift || 'N/A'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <School className="h-4 w-4 text-gray-400" />
-                        <span>{data.classMode || 'N/A'}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-2">
-                      <Heart className={`h-5 w-5 ${data.interestedInCounseling ? 'text-pink-500' : 'text-gray-400'}`} />
-                      <span>{data.interestedInCounseling ? 'Interested' : 'Not Interested'}</span>
-                    </div>
-                  </td>
-                  <td className="p-4">{data.phone || 'N/A'}</td>
-                  {/* <td className="p-4">{data.status || 'N/A'}</td> */}
-                  <td className="p-4">{data.city || 'N/A'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 text-lg">No students found.</p>
-          {searchTerm && (
-            <button
-              onClick={() => setSearchTerm('')}
-              className="mt-4 text-indigo-600 hover:text-indigo-700"
-            >
-              Clear search
-            </button>
+        {/* List of All Seats */}
+        <div className="mt-8">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">All  Exam Seats</h3>
+          {allSeats.length === 0 ? (
+            <p className="text-gray-600 text-center">No seats available.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+                <thead>
+                  <tr className="bg-gray-100 text-gray-700 text-sm uppercase">
+                    <th className="px-4 py-3 text-left">Username</th>
+                    <th className="px-4 py-3 text-left">Seat Number</th>
+                    <th className="px-4 py-3 text-center">Status</th>
+                    <th className="px-4 py-3 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allSeats.map((seat, index) => (
+                    <tr key={seat.seatNumber} className="border-t hover:bg-gray-50 transition-all">
+                      {/* Dummy Usernames */}
+                      <td className="px-4 py-3 flex items-center">
+                        <User className="h-5 w-5 text-gray-500 mr-2" />
+                        {dummyUsernames[index % dummyUsernames.length]}
+                      </td>
+
+                      {/* Seat Number */}
+                      <td className="px-4 py-3">{seat.seatNumber}</td>
+
+                      {/* Status */}
+                      <td className="px-4 py-3 text-center">
+                        <span
+                          className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                            seat.booked ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+                          }`}
+                        >
+                          {seat.booked ? "Booked" : "Available"}
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="px-4 py-3 flex justify-center items-center">
+                        <button
+                          onClick={() => deleteSeat(seat.seatNumber)}
+                          className="text-red-600 hover:text-red-800 transition-all duration-300"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
-export default StudentDetails;
+export default StudentDetail;
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { ToastContainer, toast } from 'react-toastify';
+// import { jwtDecode } from 'jwt-decode'; // Import JWT decoder
+// import { Search, Users, Mail, RefreshCw, Download } from 'lucide-react';
+// import 'react-toastify/dist/ReactToastify.css';
+
+// const StudentDetails = () => {
+//   const getUserFromToken = () => {
+//     const token = localStorage.getItem('jwt'); // Get JWT token
+//     if (token) {
+//       try {
+//         const decoded = jwtDecode(token); // Decode token
+//         return {
+//           userId: decoded._id || '',
+//           token: token,
+//         };
+//       } catch (err) {
+//         console.error("Invalid Token", err);
+//         return { userId: '', token: '' };
+//       }
+//     }
+//     return { userId: '', token: '' };
+//   };
+
+//   // Get user authentication details
+//   const authUser = getUserFromToken();
+//   const [users, setUsers] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [searchTerm, setSearchTerm] = useState('');
+
+//   useEffect(() => {
+//     if (authUser.token) {
+//       fetchUsers();
+//     }
+//   }, [authUser.token]);
+
+//   const fetchUsers = async () => {
+//     setLoading(true);
+//     try {
+//       const res = await axios.get('/api/userlist', {
+//         headers: { Authorization: `Bearer ${authUser.token}` },
+//       });
+
+//       console.log("API Response:", res.data); // Debugging
+//       setUsers(res.data);
+//     } catch (err) {
+//       console.error('Error fetching data:', err);
+//       toast.error('Failed to load students');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const exportToCSV = () => {
+//     const headers = ['Name', 'Email', 'Phone', 'Status'];
+//     const csvData = users.map(user =>
+//       [
+//         user.name || 'N/A',
+//         user.email || 'N/A',
+//         user.phone || 'N/A',
+//         user.status || 'N/A'
+//       ].join(',')
+//     );
+//     const csv = [headers.join(','), ...csvData].join('\n');
+//     const blob = new Blob([csv], { type: 'text/csv' });
+//     const url = window.URL.createObjectURL(blob);
+//     const a = document.createElement('a');
+//     a.href = url;
+//     a.download = 'students.csv';
+//     a.click();
+//     window.URL.revokeObjectURL(url);
+//   };
+
+//   return (
+//     <div className="bg-white shadow-lg rounded-xl p-6">
+//       <ToastContainer theme="colored" position="top-center" />
+
+//       <div className="flex justify-between items-center mb-6">
+//         <div className="flex items-center gap-2">
+//           <Users className="h-6 w-6 text-indigo-600" />
+//           <h1 className="text-2xl font-bold text-gray-800">Student Details</h1>
+//         </div>
+
+//         <div className="flex gap-3">
+//           <button
+//             onClick={fetchUsers}
+//             className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+//           >
+//             <RefreshCw className="h-4 w-4" />
+//             Refresh
+//           </button>
+//           <button
+//             onClick={exportToCSV}
+//             className="flex items-center gap-2 px-4 py-2 text-gray-600 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+//           >
+//             <Download className="h-4 w-4" />
+//             Export CSV
+//           </button>
+//         </div>
+//       </div>
+
+//       <div className="mb-6">
+//         <div className="relative">
+//           <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+//           <input
+//             type="text"
+//             placeholder="Search students..."
+//             value={searchTerm}
+//             onChange={(e) => setSearchTerm(e.target.value)}
+//             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+//           />
+//         </div>
+//       </div>
+
+//       {loading ? (
+//         <div className="flex items-center justify-center min-h-[400px]">
+//           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
+//           <span className="ml-3 text-lg text-gray-700">Loading students...</span>
+//         </div>
+//       ) : users.length > 0 ? (
+//         <div className="overflow-x-auto">
+//           <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+//             <thead>
+//               <tr className="bg-gray-50 border-b">
+//                 <th className="p-4 text-left font-medium text-gray-700">Student Name</th>
+//                 <th className="p-4 text-left font-medium text-gray-700">Email</th>
+//                 <th className="p-4 text-left font-medium text-gray-700">Phone</th>
+//                 <th className="p-4 text-left font-medium text-gray-700">Status</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {users.map((user) => (
+//                 <tr key={user._id} className="border-b hover:bg-gray-50 transition-colors">
+//                   <td className="p-4">{user.name || 'N/A'}</td>
+//                   <td className="p-4">{user.email || 'N/A'}</td>
+//                   <td className="p-4">{user.contact_no || 'N/A'}</td>
+//                   <td className="p-4">{user.status || 'N/A'}</td>
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+//       ) : (
+//         <div className="text-center py-12 bg-gray-50 rounded-lg">
+//           <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+//           <p className="text-gray-500 text-lg">No students found.</p>
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default StudentDetails;

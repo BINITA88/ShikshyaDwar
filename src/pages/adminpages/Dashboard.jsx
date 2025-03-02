@@ -24,7 +24,7 @@ const Dashboard = () => {
         const [categoryRes, productRes, userRes] = await Promise.all([
           axios.get("/api/categoryList"),
           axios.get("/api/productlist"),
-          axios.get("/api/userlist", {
+          axios.get("/api/bookinglist", {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);
@@ -120,10 +120,10 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50  min-h-screen">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Dashboard Overview</h1>
-        <div className="flex gap-4">
+        <div className="flex mt-4 gap-4">
           <button
             onClick={() => setTimeRange('day')}
             className={`px-4 py-2 rounded-lg ${
@@ -182,7 +182,7 @@ const Dashboard = () => {
 
         <div className="bg-white p-6 rounded-xl shadow-lg">
           <div className="mb-4">
-            <h3 className="text-xl font-semibold text-gray-800 mb-1">Students</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-1">Student enrolled</h3>
             <p className="text-sm text-gray-500">Active student base</p>
           </div>
           <div className="h-64">
@@ -213,7 +213,7 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="p-4 bg-green-50 rounded-lg">
-            <div className="text-sm text-green-600 mb-1">Users Status</div>
+            <div className="text-sm text-green-600 mb-1">Booking Status</div>
             <div className="text-2xl font-bold text-green-700">{userCount}</div>
             <div className="text-sm text-green-600">
               {((userCount / 50) * 100).toFixed(1)}% utilized

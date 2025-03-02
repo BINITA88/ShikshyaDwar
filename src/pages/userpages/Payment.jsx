@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useStripe, useElements, CardNumberElement, CardCvcElement, CardExpiryElement } from '@stripe/react-stripe-js';
 import { isAuthenticated } from '../../auth';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { CreditCard, Lock, ShieldCheck, Clock, ArrowLeft, CheckCircle } from 'lucide-react';
+import 'react-toastify/dist/ReactToastify.css';
 
 const cardElementOptions = {
   style: {
@@ -26,6 +28,7 @@ const Payment = () => {
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
+  const [loading, setLoading] = useState(false);
 
   const { user } = isAuthenticated();
   const productDetails = JSON.parse(localStorage.getItem('productDetails')) || {};
@@ -41,37 +44,60 @@ const Payment = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
     document.querySelector('#pay-btn').disabled = true;
 
-    try {
-      const order = {
-        orderItems: productDetails,
-        shippingAddress1: bookingInfo.shippingAddress1,
-        shippingAddress2: bookingInfo.shippingAddress2,
-        city: bookingInfo.city,
-        zip: bookingInfo.zip,
-        phone: bookingInfo.phone,
-        country: bookingInfo.country,
-        user: user._id,
-        paymentInfo: {
-          id: 'test_payment_id',
-          status: 'succeeded',
-        },
-      };
-
-      await localStorage.removeItem('productDetails');
-      toast.success('Payment successful!');
-      navigate('/success');
-    } catch (error) {
-      toast.error('Payment failed. Please try again.');
+    if (!stripe || !elements) {
+      toast.error('Stripe is not loaded properly!');
       document.querySelector('#pay-btn').disabled = false;
+      setLoading(false);
+      return;
+    }
+
+    try {
+      console.log("🚀 Sending payment request to backend...");
+
+      const { data } = await axios.post('/api/process/payment', {
+        amount: Math.round(totalPriceWithTax * 100), // Convert to paisa (Stripe expects smallest currency unit)
+      });
+
+      console.log("✅ Payment Intent Created:", data);
+
+      // Confirm card payment using Stripe
+      const result = await stripe.confirmCardPayment(data.client_secret, {
+        payment_method: {
+          card: elements.getElement(CardNumberElement),
+          billing_details: { name: user?.name, email: user?.email }
+        }
+      });
+
+      if (result.error) {
+        console.error("❌ Payment Failed:", result.error.message);
+        toast.error(result.error.message);
+        document.querySelector('#pay-btn').disabled = false;
+      } else {
+        if (result.paymentIntent.status === "succeeded") {
+          toast.success("🎉 Payment Successful!");
+          localStorage.removeItem('productDetails'); // Clear local storage
+          navigate("/success");
+        } else {
+          toast.error("⚠ Payment Not Completed. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error("❌ Payment Error:", error);
+      toast.error("Server Error! Check backend logs.");
+      document.querySelector('#pay-btn').disabled = false;
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-blue-50">
       <ToastContainer theme="colored" position="top-center" />
-      
+
+      {/* Navbar */}
       <nav className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -90,6 +116,7 @@ const Payment = () => {
         </div>
       </nav>
 
+      {/* Payment Form */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-3 gap-4">
@@ -110,25 +137,11 @@ const Payment = () => {
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-pink-800 px-8 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-white">Complete Payment</h2>
-                <p className="text-pink-100 mt-1">Enter your card details below</p>
-              </div>
-              <div className="h-12 w-12 bg-white/20 rounded-full flex items-center justify-center">
-                <CreditCard className="h-6 w-6 text-white" />
-              </div>
-            </div>
+            <h2 className="text-2xl font-bold text-white">Complete Payment</h2>
+            <p className="text-pink-100 mt-1">Enter your card details below</p>
           </div>
 
           <div className="px-8 py-8">
-            <div className="bg-blue-50 rounded-xl p-4 mb-8">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Amount to Pay:</span>
-                <span className="text-2xl font-bold text-pink-800">Rs.{totalPriceWithTax}</span>
-              </div>
-            </div>
-
             <form onSubmit={submitHandler} className="space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
@@ -136,7 +149,7 @@ const Payment = () => {
                     <CreditCard className="h-4 w-4 mr-2 text-pink-800" />
                     Card Number
                   </label>
-                  <div className="h-14 px-4 border border-gray-300 rounded-xl focus-within:border-pink-800 focus-within:ring-1 focus-within:ring-pink-800 transition-all duration-200">
+                  <div className="h-14 px-4 border border-gray-300 rounded-xl">
                     <CardNumberElement options={cardElementOptions} className="h-full" />
                   </div>
                 </div>
@@ -147,7 +160,7 @@ const Payment = () => {
                       <Clock className="h-4 w-4 mr-2 text-pink-800" />
                       Expiry Date
                     </label>
-                    <div className="h-14 px-4 border border-gray-300 rounded-xl focus-within:border-pink-800 focus-within:ring-1 focus-within:ring-pink-800 transition-all duration-200">
+                    <div className="h-14 px-4 border border-gray-300 rounded-xl">
                       <CardExpiryElement options={cardElementOptions} className="h-full" />
                     </div>
                   </div>
@@ -156,7 +169,7 @@ const Payment = () => {
                       <Lock className="h-4 w-4 mr-2 text-pink-800" />
                       CVC
                     </label>
-                    <div className="h-14 px-4 border border-gray-300 rounded-xl focus-within:border-pink-800 focus-within:ring-1 focus-within:ring-pink-800 transition-all duration-200">
+                    <div className="h-14 px-4 border border-gray-300 rounded-xl">
                       <CardCvcElement options={cardElementOptions} className="h-full" />
                     </div>
                   </div>
@@ -166,7 +179,10 @@ const Payment = () => {
               <button
                 type="submit"
                 id="pay-btn"
-                className="w-full bg-yellow-700 text-white py-4 px-6 rounded-xl font-medium text-lg hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-700 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg"
+                disabled={loading}
+                className={`w-full py-4 px-6 rounded-xl font-medium text-lg text-white transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg ${
+                  loading ? "bg-gray-400 cursor-not-allowed" : "bg-yellow-700 hover:bg-yellow-800"
+                }`}
               >
                 <Lock className="h-5 w-5" />
                 <span>Pay Rs.{totalPriceWithTax}</span>

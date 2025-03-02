@@ -33,6 +33,9 @@ import Routine from './pages/userpages/Routine';
 import AddSchedule from './pages/adminpages/AddSchedule';
 import ScheduleList from './pages/adminpages/ScheduleList';
 import Notice from './components/usercomponents/Notice';
+import ResetPassword from './pages/userpages/ResetPassword';
+import ForgetPassword from './pages/userpages/ForgetPassword';
+import StudentDetail from './pages/instructorpages/Student';
 
 
 
@@ -63,7 +66,7 @@ function Myroute() {
 <Route path='messageslist' element={<MessageList/>} />
 <Route path='addseat' element={<AddExamSeat />} />
 <Route path='seatlist' element={<AddExamSeatList/>} />
-<Route path='student' element={<StudentDetails/>} />
+<Route path='student' element={<StudentDetail/>} />
 </Route>
 
 
@@ -86,7 +89,10 @@ function Myroute() {
           <Route path='confirm' element={<ConfirmBooking/>} />  
           <Route path='conversation' element={<Home/>} />  
           <Route path='routine' element={<Routine/>} />  
-          <Route path='notice' element={<Notice/>} />  
+          <Route path='notice' element={<Notice/>} /> 
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
+          <Route path='forget' element={<ForgetPassword/>}/>
+
         </Route>
       </Routes>
     </Router>
