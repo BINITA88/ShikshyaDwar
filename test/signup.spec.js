@@ -18,7 +18,7 @@ test.describe('API Register Endpoint', () => {
     console.log('Response:', responseBody); 
     console.log('Status Code:', response.status()); 
 
-    // ✅ Accepts both 200 and 201
+   
     expect([200, 201]).toContain(response.status());
 
 
