@@ -32,7 +32,7 @@ test.describe('API Forget Password Endpoint', () => {
     const responseBody = await response.json();
     console.log('Error Response:', responseBody);
 
-    // Accepts both 400 and 404
+
     expect([400, 404]).toContain(response.status());
 
     // ✅ Fix: Match exact response string
