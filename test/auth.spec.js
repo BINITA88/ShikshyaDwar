@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('API Login Endpoint', () => {
 
-  // Test for successful login
+
   test('should log in a user successfully', async ({ request }) => {
     const loginResponse = await request.post('http://localhost:9000/api/login', {
       data: {
