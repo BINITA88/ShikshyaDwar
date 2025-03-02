@@ -25,7 +25,7 @@ test.describe('API Register Endpoint', () => {
     expect(responseBody).toHaveProperty('message', 'Registration successful! Please check your email to verify your account.');
   });
 
-  // ✅ Test for error when required fields are missing
+
   test('should return an error when required fields are missing', async ({ request }) => {
     const response = await request.post('http://localhost:9000/api/register', {
       data: {
