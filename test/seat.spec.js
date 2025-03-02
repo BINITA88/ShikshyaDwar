@@ -6,21 +6,6 @@ test.describe('Exam Seat API Tests', () => {
   
   let seatNumber = `S-${Math.floor(Math.random() * 1000)}`; // Generate random seat number
 
-//   // ✅ Test 1: Create a new seat
-//   test('should create a new seat', async ({ request }) => {
-//     const response = await request.post(`${BASE_URL}/create`, {
-//       data: { seatNumber: seatNumber }
-//     });
-
-//     console.log('Create Response Status:', response.status());
-//     if (response.status() === 404) test.fail('API route not found!');
-
-//     const responseBody = await response.json();
-//     console.log('Create Response:', responseBody);
-
-//     expect(response.status()).toBe(201);
-//     expect(responseBody).toHaveProperty('newSeat.seatNumber', seatNumber);
-//   });
 
   // ✅ Test 2: Retrieve all seats
   test('should get all seats', async ({ request }) => {
