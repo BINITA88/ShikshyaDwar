@@ -22,7 +22,7 @@ test.describe('Exam Seat API Tests', () => {
   });
 
 
-  // ✅ Test 4: Book a seat
+
   test('should book a seat', async ({ request }) => {
     const response = await request.post(`${BASE_URL}/book`, {
       data: { seatNumber: seatNumber }
