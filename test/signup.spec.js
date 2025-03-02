@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('API Register Endpoint', () => {
-  
+  // starting test
   // ✅ Test for successful registration
   test('should register a new user successfully', async ({ request }) => {
     const email = `testuser1${Date.now()}@example.com`; // Unique email for every test run
