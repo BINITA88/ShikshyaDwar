@@ -72,7 +72,6 @@ function Myroute() {
 
 
 
- {/* capture values from the URL and use them in your application. */}
  
         <Route path='success' element={<Success/>}/>
         {/* route for user page */}
