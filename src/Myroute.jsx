@@ -56,8 +56,8 @@ function Myroute() {
         <Route path='addschedule' element={<AddSchedule/>} />
         <Route path='schedulelist' element={<ScheduleList/>} />
         </Route>
-{/* need to fix in email one
- */}
+
+
 {/* for instructor dashboard */}
         
 <Route path='/instructor' element={<InstructorHeader/>}>
