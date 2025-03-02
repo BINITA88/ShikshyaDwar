@@ -62,13 +62,11 @@ const Routine = () => {
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <main className="max-w-7xl mx-auto my-8">
-          {/* Header */}
           <div className="flex items-center justify-center gap-2 mb-6">
             <Calendar className="w-8 h-8 text-yellow-600" />
             <h1 className="text-4xl font-bold text-gray-900">Study Routine</h1>
           </div>
 
-          {/* Unauthorized Message - Positioned Right Below Header */}
           <div className="flex flex-col items-center justify-center mt-4">
             <p className="text-lg text-gray-700 font-medium flex items-center gap-2">
               <AlertTriangle className="text-yellow-600 w-6 h-6" />
